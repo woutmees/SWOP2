@@ -1,0 +1,22 @@
+diff a/src/Controller/MyCanvasWindow.java b/src/Controller/MyCanvasWindow.java	(rejected hunks)
+@@ -1,15 +1,14 @@
+ package Controller;
+ 
+-import java.awt.Event;
++import java.awt.Color;
+ import java.awt.Graphics;
+ import java.awt.event.KeyEvent;
+-import java.awt.event.KeyListener;
+ import java.awt.event.MouseEvent;
+-import java.util.ArrayList;
+ 
+-import com.sun.prism.paint.Paint;
+-
+-import javafx.scene.input.KeyCode;
++import Model.Canvas;
++import View.CommunicationDiagram;
++import View.SequenceDiagram;
++import View.View;
+ 
+ public class MyCanvasWindow extends CanvasWindow{
+ 
