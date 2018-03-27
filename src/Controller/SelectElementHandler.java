@@ -117,7 +117,7 @@ public class SelectElementHandler extends Handler {
 							x,
 							y,
 							m.getLabel().getLabelPositionComm().xCoordinate,
-							m.getLabel().getLabelPositionComm().yCoordinate,
+							(m.getLabel().getLabelPositionComm().yCoordinate-m.getLabel().getHeight()),
 							m.getLabel().getWidth(),
 							m.getLabel().getHeight()
 							)
