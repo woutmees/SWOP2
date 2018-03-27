@@ -22,6 +22,7 @@ public class CommunicationDiagram extends View {
 	private HashSet<Party> parties;
 	private HashSet<Message> messages;
 	private Graphics graph;
+	private Random randNumberPos;
 
 	/**
 	 * Draws Communication Diagram on canvas of 
@@ -37,6 +38,9 @@ public class CommunicationDiagram extends View {
 		this.messages = c.getMessages();
 		this.graph = g;
 
+
+		randNumberPos = new Random();
+		
 		drawParties();
 		drawMessages();
 	}
@@ -127,16 +131,17 @@ public class CommunicationDiagram extends View {
 				if(m.getLabel().getSelected()){
 					graph.setColor(Color.RED);
 				}
+				//graph.drawRect(xLabel, yLabelUpdate  - m.getLabel().getHeight(), m.getLabel().getWidth(), m.getLabel().getHeight());
 				graph.drawString(visibleName, xLabel, yLabelUpdate);
 				graph.setColor(Color.BLACK);
 			//TODO Put in EditLabelHandler
-			m.getLabel().setLabelPositionComm(xLabel + m.getLabel().getWidth()/2, yLabelUpdate);
+			m.getLabel().setLabelPositionComm(xLabel, yLabelUpdate);
 			
 			int xR;
 			if(left){
-				xR = xLabel + (int) (10*visibleName.length());
+				xR = xLabel + (int)  m.getLabel().getWidth() + 10;
 			} else {
-				xR = xLabel - 20;
+				xR = xLabel - 10;
 			}
 			if(m.getLabel().getSelected()){
 				graph.setColor(Color.RED);
@@ -144,7 +149,7 @@ public class CommunicationDiagram extends View {
 			drawArrow(m, xR , yLabelUpdate);
 			graph.setColor(Color.BLACK);
 			} else {
-				drawArrow(m,xLabel,yLabelUpdate);
+				drawArrow(m,xLabel,yLabelUpdate-(m.getLabel().getHeight()/2));
 			}
 			if(left){
 				left =false;
@@ -195,7 +200,7 @@ public class CommunicationDiagram extends View {
 		double xArrow2 = x3 + ((xStart * Math.cos(angle)) - (yStart * Math.sin(angle)));
 		double yArrow2 = y3 + ((xStart * Math.sin(angle)) + (yStart * Math.cos(angle)));
 		graph.drawLine(x3, y3, (int)xArrow2, (int)yArrow2);	
-
+		
 	}
 
 	private void  drawParties() {
@@ -204,7 +209,14 @@ public class CommunicationDiagram extends View {
 		}
 	}
 	private void drawParty(Party p) {
-
+		// Check if party already has a position in Communication diagram. If default (0,0) -> place Party at random place
+		if( p.getPosComm().getX() == 0 || p.getPosComm().getY() ==  0 ) {
+			
+			int xNew = randNumberPos.nextInt(600) + 20;
+			int yNew = randNumberPos.nextInt(600) + 20;
+			//TODO Put in EditLabelHandler
+			p.setPosComm(xNew, yNew);
+		}
 		int rectWidth = p.getLabel().getWidth();
 
 		if (p.getLabel().getLabelname().length() == 0) {rectWidth = 11;}
