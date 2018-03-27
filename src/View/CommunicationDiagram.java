@@ -5,13 +5,11 @@ import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Set;
 
 import Model.Canvas;
 import Model.Message;
 import Model.Party;
-import Model.Point;
-import Model.ResultMessage;
+
 /**
  * 
  * Visual representation of a Communication diagram  
@@ -215,15 +213,18 @@ public class CommunicationDiagram extends View {
 			
 			int xNew = randNumberPos.nextInt(600) + 20;
 			int yNew = randNumberPos.nextInt(600) + 20;
+			//TODO Put in EditLabelHandler
 			p.setPosComm(xNew, yNew);
 		}
-		int rectWidth = 8*p.getLabel().getLabelname().length();
+		int rectWidth = p.getLabel().getWidth();
+
 		if (p.getLabel().getLabelname().length() == 0) {rectWidth = 11;}
+		if(p.getSelected()){
+			graph.setColor(Color.RED);
+		}
 		if( p.getClass() == Model.Actor.class ) {
 			// Draw Actor as skelet 
-			if(p.getSelected()){
-				graph.setColor(Color.RED);
-			}
+
 			graph.drawArc(p.getPosComm().getX(), p.getPosComm().getY(), 10, 10, 0, 360);
 			graph.drawArc(p.getPosComm().getX()-10, p.getPosComm().getY()+10, 30, 30, 0, 360);
 			double hartx = p.getPosComm().getX()+5;
@@ -232,27 +233,16 @@ public class CommunicationDiagram extends View {
 			graph.drawLine((int) hartx + 11, (int) harty - 11 , (int) hartx + 14 , (int) harty-14);
 			graph.drawLine((int) hartx - 11, (int) harty + 11 , (int) hartx - 14 , (int) harty+14);
 			graph.drawLine((int) hartx + 11, (int) harty + 11 , (int) hartx + 14 , (int) harty+14);
-			//Draw label + labelName
-			graph.drawRect(p.getPosComm().getX(), p.getPosComm().getY()-20, rectWidth, p.getLabel().getHeight());
-			graph.setColor(Color.BLACK);
-			
-			if(p.getLabel().getSelected()){
-				graph.setColor(Color.RED);
-			}
-			graph.drawString(p.getLabel().getLabelname(), p.getPosComm().getX()+5, p.getPosComm().getY()+13-20);
-			graph.setColor(Color.BLACK);
-		} else {
-			//Draw Object as rectangle
-			if(p.getSelected()){
-				graph.setColor(Color.RED);
-			}
-			graph.drawRect(p.getPosComm().getX(), p.getPosComm().getY(), rectWidth, p.getLabel().getHeight());
-			graph.setColor(Color.BLACK);
-			if(p.getLabel().getSelected()){
-				graph.setColor(Color.RED);
-			}
-			graph.drawString(p.getLabel().getLabelname(), p.getPosComm().getX()+5, p.getPosComm().getY()+13);
-			graph.setColor(Color.BLACK);
 		}
+		//Draw label + labelName
+		graph.drawRect(p.getPosComm().getX(), p.getPosComm().getY()-20, rectWidth, p.getLabel().getHeight());
+		graph.setColor(Color.BLACK);
+		
+		if(p.getLabel().getSelected()){
+			graph.setColor(Color.RED);
+		}
+		
+		graph.drawString(p.getLabel().getLabelname(), p.getPosComm().getX()+5, p.getPosComm().getY()+13-20);
+		graph.setColor(Color.BLACK);
 	}
 }
