@@ -3,7 +3,6 @@ package View;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Random;
 
 import Model.Canvas;
@@ -40,88 +39,15 @@ public class CommunicationDiagram extends View {
 
 
 		randNumberPos = new Random();
-		
+		c.updatePosComm();
 		drawParties();
 		drawMessages();
 	}
 
 	private void drawMessages(){
-		HashSet<LinkedList<Message>> listStacks = makeStackMessages();
-		for( LinkedList<Message> list : listStacks){
-			drawMessageLabelDifferentParty(list);
-		}
-	}
-	private HashSet<LinkedList<Message>> makeStackMessages(){
-		
-		HashSet<Message> messageRemaining = new HashSet<Message>(this.messages);
-		HashSet<LinkedList<Message>> listStacks = new HashSet<LinkedList<Message>>();
-		for(Message m1 :this.messages ){
-			if( messageRemaining.contains(m1)){
-				LinkedList<Message> l1 = new LinkedList<Message>();
-				l1.add(m1);
-				messageRemaining.remove(m1);
-				LinkedList<Message> lisToDelete = new LinkedList<Message>();
-				for( Message m2 :  messageRemaining){
-					if((m2.getReicevedBy() == m1.getReicevedBy() && m2.getSentBy() == m1.getSentBy()) || (m2.getReicevedBy() == m1.getSentBy() && m2.getSentBy()==m1.getReicevedBy())){
-						l1.add(m2);
-						lisToDelete.add(m2);
-					}
-				}
-				for( Message mToDelete : lisToDelete){
-					messageRemaining.remove(mToDelete);
-				}
-				listStacks.add(l1);
-			}
-		}
-		return listStacks;
-	}
-	
-	private void drawMessageLabelDifferentParty(LinkedList<Message> stackMessage) {
-
-		Message m1 = stackMessage.get(0);
-		int x1 = m1.getReicevedBy().getPosComm().getX();
-		int x2 = m1.getSentBy().getPosComm().getX();
-		int y1 = m1.getReicevedBy().getPosComm().getY();
-		int y2 = m1.getSentBy().getPosComm().getY();
-		
-		int xLabel;
-		int yLabel;
-		
-		// Length Vector
-		double  length = Math.sqrt(  (Math.pow(Math.abs(x2-x1),2)) +  (Math.pow(Math.abs(y2-y1),2))  );
-		int half = (int)(length/2);
-		double A = Math.abs(x2-x1);
-		double angle =  (Math.acos(A/length));
-		// Place the label name(string) between the different parties
-		if(x1<x2 && y1<y2 ) {
-			xLabel = (int) (x1 +  half*Math.cos(angle));
-			yLabel = (int) (y1 + half*Math.sin(angle));
-		} else if (y2>y1 && x1>x2) {
-			xLabel = (int) (x2 + half*Math.cos(angle));
-			yLabel = (int) (y2 - half*Math.sin(angle));
-		} else if (x1>x2 && y1>y2) {
-			xLabel = (int) (x1 - half*Math.cos(angle));
-			yLabel = (int) (y1 - half*Math.sin(angle));
-		} else if (x1<x2 && y1>y2) {
-			xLabel = (int) (x1 + half*Math.cos(angle));
-			yLabel = (int) (y1 - half*Math.sin(angle));
-		} else if (x1==x2 && y2>y1) {
-			xLabel = x1;
-			yLabel = y1 + half;
-		} else if (x1==x2 && y2<y1) {
-			xLabel = x1;
-			yLabel = y1 - half;
-		} else if (y1==y2 && x1<x2) {
-			xLabel = x1 + half;
-			yLabel = y1;
-		} else {
-			xLabel = x1 - half;
-			yLabel = y1;
-		}
-		int yLabelUpdate = yLabel;
-		boolean left = false;
-		for( Message m : stackMessage){
+		for( Message m : messages) {
 			if(m.getClass() == Model.InvocationMessage.class){
+
 				String labelName = m.getLabel().getLabelname();
 				String visibleName = new String(labelName);
 				if( labelName.length() > 30) { // check labelsize
@@ -131,38 +57,20 @@ public class CommunicationDiagram extends View {
 				if(m.getLabel().getSelected()){
 					graph.setColor(Color.RED);
 				}
-				//graph.drawRect(xLabel, yLabelUpdate  - m.getLabel().getHeight(), m.getLabel().getWidth(), m.getLabel().getHeight());
-				graph.drawString(visibleName, xLabel, yLabelUpdate);
+				graph.drawString(visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
 				graph.setColor(Color.BLACK);
-			//TODO Put in EditLabelHandler
-			m.getLabel().setLabelPositionComm(xLabel, yLabelUpdate);
+			} 
 			
-			int xR;
-			if(left){
-				xR = xLabel + (int)  m.getLabel().getWidth() + 10;
-			} else {
-				xR = xLabel - 10;
-			}
-			if(m.getLabel().getSelected()){
-				graph.setColor(Color.RED);
-			}
-			drawArrow(m, xR , yLabelUpdate);
-			graph.setColor(Color.BLACK);
-			} else {
-				drawArrow(m,xLabel,yLabelUpdate-(m.getLabel().getHeight()/2));
-			}
-			if(left){
-				left =false;
-			} else{
-				left = true;
-			}
-			yLabelUpdate += 20;
-			}	
-		if(m1.getSelected()){
-			graph.setColor(Color.RED);
+			// Draw line between two parties
+			int x1 = m.getReicevedBy().getPosComm().getX();
+			int x2 = m.getSentBy().getPosComm().getX();
+			int y1 = m.getReicevedBy().getPosComm().getY();
+			int y2 = m.getSentBy().getPosComm().getY();
+			graph.drawLine(x1,y1,x2,y2);
+			// Draw arrow for message
+
+			drawArrow(m, m.getLabel().getLabelPositionComm().getX() -10, m.getLabel().getLabelPositionComm().getY()-(m.getLabel().getHeight()/2));
 		}
-		graph.drawLine(x1,y1,x2,y2);
-		graph.setColor(Color.BLACK);
 	}
 	private void drawArrow(Message message, int x3,int y3) {
 		// Length Vector
