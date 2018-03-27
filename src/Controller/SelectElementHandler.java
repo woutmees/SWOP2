@@ -100,10 +100,10 @@ public class SelectElementHandler extends Handler {
 					isInAreaCommunication(
 							x,
 							y,
-							p.getPosComm().xCoordinate,
-							p.getPosComm().yCoordinate,
-							(p.getLabel().getLabelname().length()*8),
-							p.getLabel().getHeight()
+							p.getPosComm().getX()+3,
+							((p.getPosComm().getY()-p.getLabel().getHeight())+3),
+							(p.getLabel().getWidth()-6),
+							(p.getLabel().getHeight()-6)
 							)
 				) 
 				
@@ -217,12 +217,13 @@ public class SelectElementHandler extends Handler {
 	
 	private static boolean approxParty(Party p, int x, int y) {
 		return isInAreaCommunication(
-						x,
-						y,
-						p.getPosComm().xCoordinate,
-						p.getPosComm().yCoordinate,
-						p.getLabel().getLabelname().length()*8,
-						p.getLabel().getHeight());
+				x,
+				y,
+				(p.getPosComm().getX()-3),
+				(p.getPosComm().getY()-(p.getLabel().getHeight()+3)),
+				(p.getLabel().getWidth()+6),
+				(p.getLabel().getHeight()+6)
+				);
 	}
 	
 	private static boolean approxLifeLine(Party p, int x) {

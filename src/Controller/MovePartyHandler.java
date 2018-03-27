@@ -55,7 +55,7 @@ public class MovePartyHandler extends Handler {
 			}
 		}
 		if(!canvas.isSequenceDiagram()) {
-			selected.setPosComm(x-selected.getLabel().getLabelname().length()*4, y-selected.getLabel().getHeight()/2);
+			selected.setPosComm(x-selected.getLabel().getWidth()/2, y);
 			selected.getLabel().setLabelPositionComm(x,y);
 		}
 	}

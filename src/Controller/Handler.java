@@ -42,10 +42,10 @@ public abstract class Handler {
 					isInAreaCommunication(
 							x,
 							y,
-							p.getPosComm().getX(),
-							p.getPosComm().getY(),
-							p.getWidth(),
-							p.getHeight()
+							(p.getPosComm().getX()-6),
+							(p.getPosComm().getY()-(p.getLabel().getHeight()+6)),
+							(p.getLabel().getWidth()+12),
+							(p.getLabel().getHeight()+12)
 							)
 					
 				) {return p;} 
