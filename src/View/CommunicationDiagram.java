@@ -22,7 +22,6 @@ public class CommunicationDiagram extends View {
 	private HashSet<Party> parties;
 	private HashSet<Message> messages;
 	private Graphics graph;
-	private Random randNumberPos;
 
 	/**
 	 * Draws Communication Diagram on canvas of 
@@ -38,9 +37,6 @@ public class CommunicationDiagram extends View {
 		this.messages = c.getMessages();
 		this.graph = g;
 
-
-		randNumberPos = new Random();
-		
 		drawParties();
 		drawMessages();
 	}
@@ -208,14 +204,7 @@ public class CommunicationDiagram extends View {
 		}
 	}
 	private void drawParty(Party p) {
-		// Check if party already has a position in Communication diagram. If default (0,0) -> place Party at random place
-		if( p.getPosComm().getX() == 0 || p.getPosComm().getY() ==  0 ) {
-			
-			int xNew = randNumberPos.nextInt(600) + 20;
-			int yNew = randNumberPos.nextInt(600) + 20;
-			//TODO Put in EditLabelHandler
-			p.setPosComm(xNew, yNew);
-		}
+
 		int rectWidth = p.getLabel().getWidth();
 
 		if (p.getLabel().getLabelname().length() == 0) {rectWidth = 11;}

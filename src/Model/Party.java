@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Random;
+
 /**
  * An system or human actor that sends and receives messages from other parties.
  */
@@ -14,6 +16,8 @@ public abstract class Party {
 	private int width = 70;
 	private boolean lifeLineSelected = false;
 	private String role = "none";
+	private Random randNumberPos;
+
 	
 	/**
 	 * Constructor for a party
@@ -21,7 +25,13 @@ public abstract class Party {
 	 */
 	public Party (String cName){
 		this.className = cName;
-		this.posComm = new Point(0, 0); // default position
+
+		randNumberPos = new Random();
+			
+		int xNew = randNumberPos.nextInt(600) + 20;
+		int yNew = randNumberPos.nextInt(600) + 20;
+		
+		this.posComm = new Point(xNew, yNew); // default position
 		this.posSeq = new Point(0,0); //default position
 	}
 	
