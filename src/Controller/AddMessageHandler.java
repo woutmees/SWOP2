@@ -41,18 +41,6 @@ public class AddMessageHandler extends Handler {
 			// Add ResultMessage to Canvas
 			canvas.addMessage(result);
 			
-			/**
-			 * Line 76???
-			 * 
-			 * // Look for matching invocation
-			 *  InvocationMessage m = canvas.findInvocationMessage(receiver, sender);
-			 *  if(m == null) {throw new NullPointerException("No Matching InvocationMessage");}
-			 * // Link result and invocation
-			 * m.setResult(result);
-			 * 
-			**/
-			
-			
 			// Delete result from queue
 			canvas.getResultQueue().remove(result);
 

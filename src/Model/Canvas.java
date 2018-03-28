@@ -1,8 +1,10 @@
 package Model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import Controller.AddMessageHandler;
 import View.SequenceDiagram;
@@ -20,7 +22,7 @@ public class Canvas {
 	
 	private int width;
 	private int height;
-	private HashSet<ResultMessage> resultQueue = new HashSet<ResultMessage>();
+	private ArrayList<ResultMessage> resultQueue = new ArrayList<ResultMessage>();
 	
 	/**
 	 * 
@@ -36,7 +38,7 @@ public class Canvas {
 		this.height = height;
 	}
 	
-	public HashSet<ResultMessage> getResultQueue() {
+	public ArrayList<ResultMessage> getResultQueue() {
 		return resultQueue;
 	}
 	
@@ -50,10 +52,14 @@ public class Canvas {
 	}
 	
 	public ResultMessage searchResultQueue(Party s, Party r){
+		
+		ResultMessage result = null;
+		
 		for (ResultMessage m : resultQueue){
-			if(s == m.getSentBy() && r == m.getReicevedBy()) {return m;}
+			if(s == m.getSentBy() && r == m.getReicevedBy()) {result = m;}
 		}
-		return null;
+		
+		return result;
 	}
 	
 	public InvocationMessage findInvocationMessage(Party s, Party r) {
