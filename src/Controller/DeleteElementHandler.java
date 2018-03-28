@@ -60,6 +60,7 @@ public class DeleteElementHandler extends Handler {
 				}
 			}
 			canvas.getMessages().remove(messageToDelete); //delete message itself
+			if(messageToDelete.getClass()==InvocationMessage.class){canvas.getResultQueue().remove(messageToDelete.getResult());}
 			canvas.updateLabels();
 		}
 		

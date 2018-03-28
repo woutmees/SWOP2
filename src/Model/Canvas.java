@@ -20,6 +20,8 @@ public class Canvas {
 	
 	private int width;
 	private int height;
+	private HashSet<ResultMessage> resultQueue = new HashSet<ResultMessage>();
+	
 	/**
 	 * 
 	 * creates canvas with a given width and a given height 
@@ -32,6 +34,35 @@ public class Canvas {
 		this.messages = new HashSet<Message>();
 		this.width = width;
 		this.height = height;
+	}
+	
+	public HashSet<ResultMessage> getResultQueue() {
+		return resultQueue;
+	}
+	
+	public void addMessageResultQueue(ResultMessage m) {
+		resultQueue.add(m);
+	}
+	
+	
+	public void deleteMessageResultQueue(ResultMessage m) {
+		resultQueue.remove(m);
+	}
+	
+	public ResultMessage searchResultQueue(Party s, Party r){
+		for (ResultMessage m : resultQueue){
+			if(s == m.getSentBy() && r == m.getReicevedBy()) {return m;}
+		}
+		return null;
+	}
+	
+	public InvocationMessage findInvocationMessage(Party s, Party r) {
+		for(Message m : messages) {
+			if(s == m.getSentBy() && r == m.getReicevedBy() && m.getClass()==InvocationMessage.class) {
+				return (InvocationMessage) m;
+			}
+		}
+		return null;
 	}
 	
 	/**

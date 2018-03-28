@@ -31,35 +31,70 @@ public class AddMessageHandler extends Handler {
 		
 		if(sender==null || receiver==null) {return;}
 		
-		// Create Result Message
-		ResultMessage resultMessage = new ResultMessage(null);
-		resultMessage.setSentBy(receiver);
-		resultMessage.setReicevedBy(sender);
-		resultMessage.setOrder((getMaxOrder(canvas)+2));
+		// Check For Matching ResultMessage In Queue
+		ResultMessage result = canvas.searchResultQueue(sender, receiver);
+		if(result != null) {
+			
+			//Set Order
+			result.setOrder((getMaxOrder(canvas)+1));
+			
+			// Add ResultMessage to Canvas
+			canvas.addMessage(result);
+			
+			/**
+			 * Line 76???
+			 * 
+			 * // Look for matching invocation
+			 *  InvocationMessage m = canvas.findInvocationMessage(receiver, sender);
+			 *  if(m == null) {throw new NullPointerException("No Matching InvocationMessage");}
+			 * // Link result and invocation
+			 * m.setResult(result);
+			 * 
+			**/
+			
+			
+			// Delete result from queue
+			canvas.getResultQueue().remove(result);
+
+			// Reset roles
+			resetRoles(canvas);
+			
+			return;
+		}
 		
-		// Create Invocation Message
-		InvocationMessage invocationMessage = new InvocationMessage(null, null);
-		invocationMessage.setSentBy(sender);
-		invocationMessage.setReicevedBy(receiver);
-		invocationMessage.setOrder((getMaxOrder(canvas)+1));
-		invocationMessage.setResult(resultMessage);
+		else {
+			
+			// Create Result Message
+			ResultMessage resultMessage = new ResultMessage(null);
+			resultMessage.setSentBy(receiver);
+			resultMessage.setReicevedBy(sender);
+			
+			// Create Invocation Message
+			InvocationMessage invocationMessage = new InvocationMessage(null, null);
+			invocationMessage.setSentBy(sender);
+			invocationMessage.setReicevedBy(receiver);
+			invocationMessage.setOrder((getMaxOrder(canvas)+1));
+			invocationMessage.setResult(resultMessage);
+			
+			// Put Result In Queue
+			canvas.addMessageResultQueue(resultMessage);
+			
+			//Add messages
+			Label labelInvocation = new Label("   ");
+			labelInvocation.setSelected(true);
+			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
+			int invocLabelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
+			labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
+			EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
+			invocationMessage.setLabel(labelInvocation);
+			canvas.addMessage(invocationMessage);
+			
+			// Reset roles
+			resetRoles(canvas);
+			return;
+			
+		}
 		
-		//Add messages
-		Label labelInvocation = new Label("   ");
-		labelInvocation.setSelected(true);
-		int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
-		int invocLabelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
-		labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
-		EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
-		invocationMessage.setLabel(labelInvocation);
-		canvas.addMessage(invocationMessage);		
-		
-		canvas.addMessage(resultMessage);
-		invocationMessage.setResult(resultMessage);
-		
-		
-		// Reset roles
-		resetRoles(canvas);
 		
 	}
 	
