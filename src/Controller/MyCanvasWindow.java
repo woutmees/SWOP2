@@ -118,9 +118,9 @@ public class MyCanvasWindow extends CanvasWindow{
 			for(Party p : canvas.getParties()){
 				if(p.getLabel().getSelected()) {
 					if(canvas.isSequenceDiagram())
-						EditLabelHandler.handle(canvas, p.getLabel(), keyChar, p.getLabel().getLabelPositionSequence().getX(), p.getLabel().getLabelPositionSequence().getY());
+						EditLabelHandler.handle(canvas, p.getLabel(), p, keyChar, p.getLabel().getLabelPositionSequence().getX(), p.getLabel().getLabelPositionSequence().getY());
 					else 
-						EditLabelHandler.handle(canvas, p.getLabel(), keyChar, p.getLabel().getLabelPositionComm().getX(), p.getLabel().getLabelPositionComm().getY());
+						EditLabelHandler.handle(canvas, p.getLabel(), p, keyChar, p.getLabel().getLabelPositionComm().getX(), p.getLabel().getLabelPositionComm().getY());
 					break;
 				}
 			}
@@ -155,10 +155,10 @@ public class MyCanvasWindow extends CanvasWindow{
 	public static void main(String[] args) {
 		
 //		2 -- Create a recording
-//	     String pathPrefix =
-//	    		 "C:\\Users\\robbe\\Documents\\GitHub\\SWOP-project\\src\\test\\recordings\\";
-//	     String newFile = 
-//	    		 "editLabel\\editMessageLabel3";
+//	    String pathPrefix =
+//		 "C:\\Users\\robbe\\git\\SWOP2\\src\\test\\recordings\\";
+//		 String newFile = 
+//		 "editLabel\\editMessageLabel4";
 //	     String filePath = pathPrefix + newFile;
 	     MyCanvasWindow myCanvas = new MyCanvasWindow("My Canvas Window");
 //		 myCanvas.recordSession(filePath);

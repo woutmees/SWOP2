@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import Model.Canvas;
 import Model.Label;
+import Model.Party;
 import Model.Point;
 
 /**
@@ -20,6 +21,34 @@ public class EditLabelHandler {
 	 */
 	public static void handle(Canvas canvas, Label label, int x, int y) {
 		handle(canvas, label, Character.MIN_VALUE, x, y);
+	}
+	
+	public static void handle(Canvas canvas, Label label, Party party, char character, int x, int y) {
+		if(label.getSelected()) {
+			if(character==KeyEvent.VK_DELETE) {return;}
+			if (character == KeyEvent.VK_BACK_SPACE){
+				handle(canvas, label, "BACKSPACE");
+				return;	
+			} else if (character == KeyEvent.VK_ENTER){
+				if(isCorrectPartyLabel(label.getLabelname())) {
+					handle(canvas, label, "ENTER");
+				}
+				return;
+			} else if (character == KeyEvent.VK_ESCAPE)
+				return;			
+			if(canvas.isSequenceDiagram())
+				label.setLabelPositionSeq(new Point(x, y));
+			else 
+				label.setLabelPositionComm(new Point(x, y));
+			String name = label.getLabelname().replace("|", "") + character + '|';
+			label.setLabelname(name);
+			int width = 8*name.length();
+			if (width == 0)
+				width = 11;
+			label.setWidth(width);
+		} else {
+			label.setLabelname(label.getLabelname().replace("|", ""));
+		}
 	}
 	
 	/**
@@ -74,6 +103,13 @@ public class EditLabelHandler {
 			label.setLabelname(name);
 			label.setSelected(false);
 		}
+	}
+	
+	static public boolean isCorrectPartyLabel(String label){
+		if(label.matches("([a-z][a-zA-Z]*)?:[A-Z][a-zA-Z]*\\|")){
+			return true;
+		}
+		return false;
 	}
 	
 }
