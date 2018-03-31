@@ -6,9 +6,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.sun.xml.internal.bind.unmarshaller.Messages;
-
 import Model.Actor;
 import Model.Canvas;
 import Model.Label;
@@ -48,8 +45,10 @@ public class SequenceDiagram extends View {
 				g.setColor(Color.RED);
 			if (a.getClass() == Model.Actor.class) {
 				drawStickFigure(g, c, a.getPosSeq().getX(), a.getPosSeq().getY());
+				g.drawRect(a.getLabel().getLabelPositionSequence().getX() - a.getLabel().getWidth()/2, a.getLabel().getLabelPositionSequence().getY() - a.getLabel().getHeight()/2, a.getLabel().getWidth(), a.getLabel().getHeight());
 			} else if (a.getClass() == Model.Object.class) {
-				g.drawRect(a.getPosSeq().getX()-a.getWidth()/2, a.getPosSeq().getY()-a.getHeight()/2, a.getWidth(), a.getHeight());
+				//g.drawRect(a.getPosSeq().getX()-a.getWidth()/2, a.getPosSeq().getY()-a.getHeight()/2, a.getWidth(), a.getHeight());
+				g.drawRect(a.getLabel().getLabelPositionSequence().getX() - a.getLabel().getWidth()/2, a.getLabel().getLabelPositionSequence().getY() - a.getLabel().getHeight()/2, a.getLabel().getWidth(), a.getLabel().getHeight());
 			}
 			g.setColor(Color.BLACK);
 			drawLifeline(c, g, a.getPosSeq().getX());
@@ -141,7 +140,7 @@ public class SequenceDiagram extends View {
 		int y = label.getLabelPositionSequence().getY();
 		int width = label.getWidth();
 		int height = label.getHeight();
-		g.drawRect(x - width/2, y - height/2, width, height);
+		//g.drawRect(x - width/2, y - height/2, width, height);
 		char[] name = label.getLabelname().toCharArray();
 		g.drawChars(name, 0, name.length, x-(width/2)+5, y);
 		label.setWidth(width);

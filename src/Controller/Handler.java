@@ -21,14 +21,29 @@ public abstract class Handler {
 
 	protected static Party getPartySequenceDiagram(int x, int y, Canvas canvas) {
 		for(Party p : canvas.getParties()) {
-			if(
+			int xPos;
+			int yPos;
+			int width;
+			int height;
+			if(p.getClass() == Model.Object.class) {
+				xPos = p.getLabel().getLabelPositionSequence().getX();
+				yPos = p.getLabel().getLabelPositionSequence().getY();
+				width = p.getWidth()+3;
+				height = p.getHeight()+6;
+			} else {
+				xPos = p.getLabel().getLabelPositionSequence().getX();
+				yPos = p.getPosSeq().getY();
+				width = p.getWidth();
+				height = p.getPosSeq().getY() + p.getHeight() + 10 + p.getLabel().getHeight();
+			}
+			if( 
 					isInArea(
 							x,
 							y,
-							p.getPosSeq().getX(),
-							p.getPosSeq().getY(),
-							p.getWidth(),
-							p.getHeight()
+							xPos,
+							yPos,
+							width,
+							height
 							)
 					
 				) {return p;} 
@@ -38,6 +53,12 @@ public abstract class Handler {
 
 	protected static Party getPartyCommunicationDiagram(int x, int y, Canvas canvas) {
 		for(Party p : canvas.getParties()) {
+			int height;
+			if(p.getClass() == Model.Object.class) {
+				height = (p.getLabel().getHeight()+12);
+			} else {
+				height = (p.getLabel().getHeight()+40);
+			}
 			if(
 					isInAreaCommunication(
 							x,
@@ -45,7 +66,7 @@ public abstract class Handler {
 							(p.getPosComm().getX()-6),
 							(p.getPosComm().getY()-(p.getLabel().getHeight()+6)),
 							(p.getLabel().getWidth()+12),
-							(p.getLabel().getHeight()+12)
+							height
 							)
 					
 				) {return p;} 

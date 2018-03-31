@@ -24,6 +24,7 @@ public class EditLabelHandler {
 	}
 	
 	public static void handle(Canvas canvas, Label label, Party party, char character, int x, int y) {
+		
 		if(label.getSelected()) {
 			if(character==KeyEvent.VK_DELETE) {return;}
 			if (character == KeyEvent.VK_BACK_SPACE){
@@ -60,6 +61,8 @@ public class EditLabelHandler {
 	 * @param y			The y coordinate of the mouse event used to handle this event.
 	 */
 	public static void handle(Canvas canvas, Label label, char character, int x, int y) {
+		
+		
 		if(label.getSelected()){
 			if(character==KeyEvent.VK_DELETE) {return;}
 			if (character == KeyEvent.VK_BACK_SPACE){
@@ -108,6 +111,15 @@ public class EditLabelHandler {
 	static public boolean isCorrectPartyLabel(String label){
 		if(label.matches("([a-z][a-zA-Z]*)?:[A-Z][a-zA-Z]*\\|")){
 			return true;
+		}
+		return false;
+	}
+	
+	static public boolean editLabelMode(Canvas  canvas) {
+		for(Party p : canvas.getParties()){
+			if(p.getLabel().getSelected()) {
+				return !(isCorrectPartyLabel(p.getLabel().getLabelname()));
+			}
 		}
 		return false;
 	}

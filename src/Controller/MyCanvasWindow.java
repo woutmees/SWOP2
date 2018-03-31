@@ -64,6 +64,7 @@ public class MyCanvasWindow extends CanvasWindow{
 	 */
 	@Override
 	protected void handleMouseEvent(int id, int x, int y, int clickCount){
+		if(!EditLabelHandler.editLabelMode(canvas)) {
 		switch(id){
 		case MouseEvent.MOUSE_DRAGGED:
 			SelectElementHandler.handle(canvas, x, y, 1);
@@ -83,6 +84,7 @@ public class MyCanvasWindow extends CanvasWindow{
 		for(Party p:canvas.getParties()) {
 			System.out.println(p.getRole());
 		}
+		}
 		repaint();
 	
 	}
@@ -96,7 +98,7 @@ public class MyCanvasWindow extends CanvasWindow{
 	@Override
 	protected void handleKeyEvent(int id, int keyCode, char keyChar){
 		Handler handler;
-		if(id == KeyEvent.KEY_PRESSED) {
+		if(id == KeyEvent.KEY_PRESSED && !EditLabelHandler.editLabelMode(canvas)) {
 			switch(keyCode){
 			case KeyEvent.VK_TAB:
 				System.out.println("TAB");
