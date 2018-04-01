@@ -59,6 +59,7 @@ public class CommunicationDiagram extends View {
 				}
 				graph.drawString(visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
 				graph.setColor(Color.BLACK);
+				drawArrow(m, m.getLabel().getLabelPositionComm().getX() -10, m.getLabel().getLabelPositionComm().getY()-(m.getLabel().getHeight()/2));
 			} 
 			
 			// Draw line between two parties
@@ -68,8 +69,6 @@ public class CommunicationDiagram extends View {
 			int y2 = m.getSentBy().getPosComm().getY();
 			graph.drawLine(x1,y1,x2,y2);
 			// Draw arrow for message
-
-			drawArrow(m, m.getLabel().getLabelPositionComm().getX() -10, m.getLabel().getLabelPositionComm().getY()-(m.getLabel().getHeight()/2));
 		}
 	}
 	private void drawArrow(Message message, int x3,int y3) {
