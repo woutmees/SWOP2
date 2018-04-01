@@ -1,5 +1,6 @@
 package Controller;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import Model.Canvas;
 import Model.InvocationMessage;
@@ -49,7 +50,9 @@ public class DeleteElementHandler extends Handler {
 		for( Party partyToDelete : toDeleteParties ) {
 			canvas.getParties().remove(partyToDelete);
 		}
+		
 		//Delete Message from canvas
+		int order = 0;
 		for( Message messageToDelete : toDeleteMessages) {
 			for ( Message findMessage : canvas.getMessages()) {
 				// find message that has the to be the delete message as predecessor
@@ -59,6 +62,21 @@ public class DeleteElementHandler extends Handler {
 					break;
 				}
 			}
+			
+			// Delete all message that have a higher order! (correcting sequence diagram!)
+			ArrayList<Message> tempList = new ArrayList<Message>();
+			System.out.println(messageToDelete.getOrder()+" order to delete ");
+			for(Message m :canvas.getMessages()) {
+				if( m.getOrder() > messageToDelete.getOrder() ) {
+					System.out.println(" order:"+ m.getOrder());
+					tempList.add(m);
+				}
+			}
+			for(Message m:tempList) {
+				canvas.getMessages().remove(m);
+			}
+			
+			
 			canvas.getMessages().remove(messageToDelete); //delete message itself
 			if(messageToDelete.getClass()==InvocationMessage.class){canvas.getResultQueue().remove(messageToDelete.getResult());}
 			canvas.updateLabels();
@@ -73,6 +91,8 @@ public class DeleteElementHandler extends Handler {
 				label.setLabelPositionSeq(new Point(labelX, labelY));
 			}
 		}
+		//Update Stack of Parties!
+		canvas.updateStack();
 	}
 	
 	private static int getAmountPredecessors(Canvas canvas, Message message) {

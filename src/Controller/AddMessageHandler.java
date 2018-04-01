@@ -31,6 +31,61 @@ public class AddMessageHandler extends Handler {
 		
 		if(sender==null || receiver==null) {return;}
 		
+		// Check if the sending party is allowed as sender
+		if(!canvas.checkSendingParty(sender)) {
+			// Reset roles
+			resetRoles(canvas);
+			return;
+		} else if(!canvas.resultMessageCheck(sender, receiver)){
+						
+	
+			// Invocation message is needed!
+			canvas.addPartyToStack(sender);
+			canvas.addPartyToStack(receiver);
+			
+			// Create Invocation Message
+			InvocationMessage invocationMessage = new InvocationMessage(null, null);
+			invocationMessage.setSentBy(sender);
+			invocationMessage.setReicevedBy(receiver);
+			invocationMessage.setOrder((getMaxOrder(canvas)+1));
+			//invocationMessage.setResult(resultMessage);
+			
+			//Add messages
+			Label labelInvocation = new Label("   ");
+			labelInvocation.setSelected(true);
+			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
+			int invocLabelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
+			labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
+			EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
+			invocationMessage.setLabel(labelInvocation);
+			canvas.addMessage(invocationMessage); 
+			
+		} else {
+			// ResultMessage is needed!
+						
+			canvas.deletePartyFromStack(sender);
+			
+			// Create Result Message
+			ResultMessage resultMessage = new ResultMessage(null);
+			resultMessage.setSentBy(sender);
+			resultMessage.setReicevedBy(receiver);
+			resultMessage.setOrder((getMaxOrder(canvas)+1));
+			
+			int order = 0;
+			InvocationMessage message = null;
+			for( Message m : canvas.getMessages()) {
+				if(m.getClass() == Model.InvocationMessage.class && m.getReicevedBy().equals(sender) && m.getSentBy().equals(receiver) && m.getOrder() >= order) {
+					message = (InvocationMessage) m;
+					order = m.getOrder();
+				}
+			}
+			if(message != null) { message.setResult(resultMessage); }
+			
+			canvas.addMessage(resultMessage);
+		}
+		
+		/**
+		
 		// Check For Matching ResultMessage In Queue
 		ResultMessage result = canvas.searchResultQueue(sender, receiver);
 		if(result != null) {
@@ -46,7 +101,6 @@ public class AddMessageHandler extends Handler {
 
 			// Reset roles
 			resetRoles(canvas);
-			
 			return;
 		}
 		
@@ -82,7 +136,7 @@ public class AddMessageHandler extends Handler {
 			return;
 			
 		}
-		
+		*/
 		
 	}
 	
