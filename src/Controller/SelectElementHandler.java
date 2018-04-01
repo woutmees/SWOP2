@@ -47,7 +47,7 @@ public class SelectElementHandler extends Handler {
 		if(id == 0) {
 			Label label = getLabelAt(x,y, canvas);	
 			Party party = getPartyAt(x,y,canvas);
-			if(label != null) {label.setSelected(true);}
+			if(label != null) {label.setSelected(true); return;}
 			else if (party!=null) {party.setSelected(true);}
 			if (canvas.isSequenceDiagram()){assignRoles(canvas, x);}
 			else {assignRoles(canvas,x,y);}
