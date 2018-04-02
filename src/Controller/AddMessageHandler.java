@@ -82,7 +82,11 @@ public class AddMessageHandler extends Handler {
 			if(message != null) { message.setResult(resultMessage); }
 			
 			canvas.addMessage(resultMessage);
+			
 		}
+		// Reset roles
+		resetRoles(canvas);
+		return;
 		
 		/**
 		
