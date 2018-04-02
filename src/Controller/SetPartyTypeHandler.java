@@ -30,7 +30,7 @@ public class SetPartyTypeHandler extends Handler {
 		
 		//Find old party in stack -> replace it with new party
 		try {
-		int index = canvas.getPartyStack().indexOf(changingParty);
+		int index = canvas.getPartyStack().lastIndexOf(changingParty);
 		canvas.getPartyStack().remove(index);
 		canvas.getPartyStack().add(index, partyToAdd);
 		} catch (Exception e) {
