@@ -57,7 +57,7 @@ public abstract class Handler {
 			if(p.getClass() == Model.Object.class) {
 				height = (p.getLabel().getHeight()+12);
 			} else {
-				height = (p.getLabel().getHeight()+40);
+				height = (p.getLabel().getHeight()+60);
 			}
 			if(
 					isInAreaCommunication(

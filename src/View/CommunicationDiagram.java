@@ -2,7 +2,9 @@ package View;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 import Model.Canvas;
@@ -46,7 +48,8 @@ public class CommunicationDiagram extends View {
 
 	private void drawMessages(){
 		int messageNumber = 1;
-		for( Message m : messages) {
+		LinkedList<Message> sortedListOfMessage = Canvas.messageSort(new LinkedList<Message>(messages));
+		for( Message m : sortedListOfMessage) {
 			if(m.getClass() == Model.InvocationMessage.class){
 
 				String labelName = m.getLabel().getLabelname();

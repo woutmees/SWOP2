@@ -226,15 +226,15 @@ public class Canvas {
 		messagesUpdate();
 	}
 	private void messagesUpdate(){
-		HashSet<LinkedList<Message>> listStacks = makeStackMessages();
+		LinkedList<LinkedList<Message>> listStacks = makeStackMessages();
 		for( LinkedList<Message> list : listStacks){
 			updatePosStackMessages(list);
 		}
 	}
-	private HashSet<LinkedList<Message>> makeStackMessages(){
+	private LinkedList<LinkedList<Message>> makeStackMessages(){
 		
 		HashSet<Message> messageRemaining = new HashSet<Message>(this.messages);
-		HashSet<LinkedList<Message>> listStacks = new HashSet<LinkedList<Message>>();
+		LinkedList<LinkedList<Message>> listStacks = new LinkedList<LinkedList<Message>>();
 		for(Message m1 :this.messages ){
 			if( messageRemaining.contains(m1)){
 				LinkedList<Message> l1 = new LinkedList<Message>();
@@ -250,7 +250,7 @@ public class Canvas {
 				for( Message mToDelete : lisToDelete){
 					messageRemaining.remove(mToDelete);
 				}
-				listStacks.add(l1);
+				listStacks.add(messageSort(l1));
 			}
 		}
 		return listStacks;
@@ -343,7 +343,7 @@ public class Canvas {
 		}
 	}
 	public void updateStack() {
-		ArrayList<Message> sortedListOfMessage = messageSort(new HashSet<Message>(messages));
+		LinkedList<Message> sortedListOfMessage = messageSort(new LinkedList<Message>(messages));
 		// New Stack is needed!
 		sendingPartyStack =  new Stack<Party>();  
 		for(Message m: sortedListOfMessage) {
@@ -357,8 +357,8 @@ public class Canvas {
 			}
 		}
 	}
-	private ArrayList<Message> messageSort(HashSet<Message> unsortedMessages){
-		ArrayList<Message> sorted = new ArrayList<Message>();
+	public static LinkedList<Message> messageSort(LinkedList<Message> unsortedMessages){
+		LinkedList<Message> sorted = new LinkedList<Message>();
 		int amount = unsortedMessages.size();
 		int index = 0;
 		int currentOrder = 1;
@@ -374,7 +374,7 @@ public class Canvas {
 	}
 	
 	//Return the message with the lowest order that is greater than or equal to i.
-	private Message getLowestOrderMessage(HashSet<Message> unsortedMessages, int i) {
+	public static Message getLowestOrderMessage(LinkedList<Message> unsortedMessages, int i) {
 		Message min = null;
 		int minimum = Integer.MAX_VALUE;
 		int order;

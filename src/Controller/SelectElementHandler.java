@@ -219,13 +219,19 @@ public class SelectElementHandler extends Handler {
 	}
 	
 	private static boolean approxParty(Party p, int x, int y) {
+		int height;
+		if(p.getClass() == Model.Object.class) {
+			height = (p.getLabel().getHeight()+12);
+		} else {
+			height = (p.getLabel().getHeight()+60);
+		}
 		return isInAreaCommunication(
 				x,
 				y,
-				(p.getPosComm().getX()-3),
-				(p.getPosComm().getY()-(p.getLabel().getHeight()+3)),
-				(p.getLabel().getWidth()+6),
-				(p.getLabel().getHeight()+6)
+				(p.getPosComm().getX()-6),
+				(p.getPosComm().getY()-(p.getLabel().getHeight()+6)),
+				(p.getLabel().getWidth()+12),
+				height
 				);
 	}
 	
