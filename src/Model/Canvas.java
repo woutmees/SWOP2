@@ -22,7 +22,7 @@ public class Canvas {
 	private int width;
 	private int height;
 	private ArrayList<ResultMessage> resultQueue = new ArrayList<ResultMessage>();
-	public  Stack<Party> sendingPartyStack = new Stack<Party>(); 
+	private  Stack<Party> sendingPartyStack = new Stack<Party>(); 
 	
 	/**
 	 * 
@@ -387,6 +387,8 @@ public class Canvas {
 		}
 		return min;
 	}
-
+	public Stack<Party> getPartyStack(){
+		return sendingPartyStack;
+	}
 	
 }

@@ -20,14 +20,18 @@ public class SetPartyTypeHandler extends Handler {
 		
 		Party changingParty = getPartyAt(x, y, canvas);	
 		if(changingParty==null) {return;}
-		
+		 
 		Party partyToAdd;
 		if( Model.Object.class == changingParty.getClass() ) {	
 			partyToAdd = new Model.Actor(changingParty.getClassName());
-			
 		} else {
 			partyToAdd =  new Model.Object(changingParty.getClassName());
 		}
+		
+		//Find old party in stack -> replace it with new party
+		int index = canvas.getPartyStack().indexOf(changingParty);
+		canvas.getPartyStack().remove(index);
+		canvas.getPartyStack().add(index, partyToAdd);
 		
 		partyToAdd.setLabel(changingParty.getLabel());
 		partyToAdd.setPosComm(changingParty.getPosComm().getX(), changingParty.getPosComm().getY());
@@ -35,9 +39,9 @@ public class SetPartyTypeHandler extends Handler {
 		partyToAdd.setSelected(false);
 		
 		for(Message m : canvas.getMessages()) {
-			if(m.getSentBy() == changingParty)
+			if(m.getSentBy().equals(changingParty))
 				m.setSentBy(partyToAdd);
-			if(m.getReicevedBy() == changingParty)
+			if(m.getReicevedBy().equals(changingParty))
 				m.setReicevedBy(partyToAdd);
 		}
 		

@@ -45,6 +45,7 @@ public class CommunicationDiagram extends View {
 	}
 
 	private void drawMessages(){
+		int messageNumber = 1;
 		for( Message m : messages) {
 			if(m.getClass() == Model.InvocationMessage.class){
 
@@ -57,9 +58,10 @@ public class CommunicationDiagram extends View {
 				if(m.getLabel().getSelected()){
 					graph.setColor(Color.RED);
 				}
-				graph.drawString(visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
+				graph.drawString(messageNumber+": "+ visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
 				graph.setColor(Color.BLACK);
 				drawArrow(m, m.getLabel().getLabelPositionComm().getX() -10, m.getLabel().getLabelPositionComm().getY()-(m.getLabel().getHeight()/2));
+				messageNumber++;
 			} 
 			
 			// Draw line between two parties
