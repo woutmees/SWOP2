@@ -68,7 +68,6 @@ public class DeleteElementHandler extends Handler {
 			System.out.println(messageToDelete.getOrder()+" order to delete ");
 			for(Message m :canvas.getMessages()) {
 				if( m.getOrder() > messageToDelete.getOrder() ) {
-					System.out.println(" order:"+ m.getOrder());
 					tempList.add(m);
 				}
 			}
