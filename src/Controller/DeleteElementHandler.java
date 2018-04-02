@@ -52,7 +52,6 @@ public class DeleteElementHandler extends Handler {
 		}
 		
 		//Delete Message from canvas
-		int order = 0;
 		for( Message messageToDelete : toDeleteMessages) {
 			for ( Message findMessage : canvas.getMessages()) {
 				// find message that has the to be the delete message as predecessor
@@ -65,7 +64,6 @@ public class DeleteElementHandler extends Handler {
 			
 			// Delete all message that have a higher order! (correcting sequence diagram!)
 			ArrayList<Message> tempList = new ArrayList<Message>();
-			System.out.println(messageToDelete.getOrder()+" order to delete ");
 			for(Message m :canvas.getMessages()) {
 				if( m.getOrder() > messageToDelete.getOrder() ) {
 					tempList.add(m);
