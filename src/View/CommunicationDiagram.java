@@ -17,6 +17,18 @@ import Model.Party;
  * 
  * @author patserbak
  *
+ * messageNumber: Keeping track of number of messages
+ * sent by the different parties in the current 
+ * communicationline.
+ * 
+ * A->B				1 O O O
+ * 	  B->C			1 1 0 0
+ * 		 C->D		1 1 1 0
+ *    B->C          1 2 0 0
+ *    B->C          1 3 0 0
+ *    	 C->D       1 3 1 0
+ * A->B             2 0 0 0
+ *
  */
 public class CommunicationDiagram extends View {
 	
@@ -47,11 +59,17 @@ public class CommunicationDiagram extends View {
 	}
 
 	private void drawMessages(){
-		int messageNumber = 1;
+		int[] messageNumber = new int[parties.size()];
+		Party[] parties = createPartyIndex();
+				
 		LinkedList<Message> sortedListOfMessage = Canvas.messageSort(new LinkedList<Message>(messages));
 		for( Message m : sortedListOfMessage) {
+			
 			if(m.getClass() == Model.InvocationMessage.class){
 
+				//Handle messageNumber in case of invocation
+				updateMessageNumber(m.getSentBy(), parties, messageNumber);
+				
 				String labelName = m.getLabel().getLabelname();
 				String visibleName = new String(labelName);
 				if( labelName.length() > 30) { // check labelsize
@@ -61,10 +79,9 @@ public class CommunicationDiagram extends View {
 				if(m.getLabel().getSelected()){
 					graph.setColor(Color.RED);
 				}
-				graph.drawString(messageNumber+": "+ visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
+				graph.drawString(printMessageNumber(messageNumber)+": "+ visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
 				graph.setColor(Color.BLACK);
 				drawArrow(m, m.getLabel().getLabelPositionComm().getX() -10, m.getLabel().getLabelPositionComm().getY()-(m.getLabel().getHeight()/2));
-				messageNumber++;
 			} 
 			
 			// Draw line between two parties
@@ -76,6 +93,63 @@ public class CommunicationDiagram extends View {
 			// Draw arrow for message
 		}
 	}
+	
+	private Party[] createPartyIndex() {
+		
+		Party[] result = new Party[parties.size()];
+		int i = 0;
+		
+		for(Party p : parties) {
+			result[i] = p;
+			i++;
+		}
+		
+		return sortParties(result);
+		
+	}
+
+	
+	//TODO Efficiency
+	private Party[] sortParties(Party[] result) {
+		Party[] u = result;
+		Party[] s = new Party[result.length];
+		
+		for(int i=0; i<result.length; i++) {
+			Party next = null;
+			int index = 0;
+			for(int j=0; j<u.length; j++) {
+				if(u[j]==null) {}
+				else if(next==null) {next = u[j];index = j;}
+				else if(u[j].getPosSeq().getX()<next.getPosSeq().xCoordinate) {next = u[j];index = j;}
+			}
+			u[index]=null;
+			s[i]=next;
+		}
+		
+		return s;
+		
+	}
+
+	private void updateMessageNumber(Party sentBy, Party[] parties, int[] messageNumber) {
+		boolean reset = false;
+		
+		for(int i = 0; i< parties.length; i++) {
+			if(reset==true) {messageNumber[i] = 0;}
+			else if(parties[i]==sentBy) {messageNumber[i]++; reset = true;}
+		}
+	}
+
+	private String printMessageNumber(int[] n) {
+		String s = "";
+		
+		for(int i : n) {
+			if(i==0) {return s;}
+			s = s + i + '.';
+		}
+		
+		return s;
+	}
+	
 	private void drawArrow(Message message, int x3,int y3) {
 		// Length Vector
 		
