@@ -17,6 +17,8 @@ public abstract class Party {
 	private boolean lifeLineSelected = false;
 	private String role = "none";
 	private Random randNumberPos;
+	
+	private int selectedYPosition;
 
 	
 	/**
@@ -180,6 +182,14 @@ public abstract class Party {
 	 */
 	public void makeNone() {
 		role = "none";
+	}
+
+	public int getSelectedYPosition() {
+		return selectedYPosition;
+	}
+
+	public void setSelectedYPosition(int selectedYPosition) {
+		this.selectedYPosition = selectedYPosition;
 	}
 	
 }

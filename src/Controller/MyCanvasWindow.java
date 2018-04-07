@@ -64,7 +64,7 @@ public class MyCanvasWindow extends CanvasWindow{
 	 */
 	@Override
 	protected void handleMouseEvent(int id, int x, int y, int clickCount){
-		if(!EditLabelHandler.editLabelMode(canvas)) {
+		if(!EditLabelHandler.editLabelModeParty(canvas)) {
 		switch(id){
 		case MouseEvent.MOUSE_DRAGGED:
 			SelectElementHandler.handle(canvas, x, y, 1);
@@ -75,11 +75,13 @@ public class MyCanvasWindow extends CanvasWindow{
 				SelectElementHandler.handle(canvas, x, y, 0);
 				AddMessageHandler.handle(canvas, x, y);
 			} else if(clickCount == 2){
-				if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);}
-				else{AddPartyHandler.handle(canvas, x, y);}
+				// First check if the a message label is already editing.
+				if( !EditLabelHandler.editLabelModeMessage(canvas)) {
+					if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);}
+					else{AddPartyHandler.handle(canvas, x, y);}
+				}
 			}
 			break;
-	
 		}
 		for(Party p:canvas.getParties()) {
 			System.out.println(p.getRole());
@@ -98,7 +100,7 @@ public class MyCanvasWindow extends CanvasWindow{
 	@Override
 	protected void handleKeyEvent(int id, int keyCode, char keyChar){
 		Handler handler;
-		if(id == KeyEvent.KEY_PRESSED && !EditLabelHandler.editLabelMode(canvas)) {
+		if(id == KeyEvent.KEY_PRESSED && !EditLabelHandler.editLabelModeParty(canvas)) {
 			switch(keyCode){
 			case KeyEvent.VK_TAB:
 				System.out.println("TAB");
@@ -117,8 +119,10 @@ public class MyCanvasWindow extends CanvasWindow{
 				break;
 			}
 		} else if (id == KeyEvent.KEY_TYPED) {
+			boolean found = false;
 			for(Party p : canvas.getParties()){
 				if(p.getLabel().getSelected()) {
+					found = true;
 					if(canvas.isSequenceDiagram())
 						EditLabelHandler.handle(canvas, p.getLabel(), p, keyChar, p.getLabel().getLabelPositionSequence().getX(), p.getLabel().getLabelPositionSequence().getY());
 					else 
@@ -135,7 +139,6 @@ public class MyCanvasWindow extends CanvasWindow{
 					break;
 				}
 			}
-			
 		}
 		repaint();
 	}

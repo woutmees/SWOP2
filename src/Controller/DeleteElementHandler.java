@@ -53,52 +53,26 @@ public class DeleteElementHandler extends Handler {
 		
 		//Delete Message from canvas
 		for( Message messageToDelete : toDeleteMessages) {
-			for ( Message findMessage : canvas.getMessages()) {
-				// find message that has the to be the delete message as predecessor
-				if(findMessage.getPredecessor() == messageToDelete ) { 
-					// push predecessor from deleted message 
-					findMessage.setPredecessor(messageToDelete.getPredecessor()); 
-					break;
+			
+			// Delete all message that have a higher order and below the order of the resultmessage order(correcting sequence diagram!)
+			if( messageToDelete.getClass() == Model.InvocationMessage.class) {
+				int orderResultMessage = messageToDelete.getResult().getOrder();
+				ArrayList<Message> tempList = new ArrayList<Message>();
+				for(Message m :canvas.getMessages()) {
+			
+					if( m.getOrder() > messageToDelete.getOrder() && orderResultMessage >= m.getOrder()) {
+						tempList.add(m);
+					}
+				}
+				for(Message m:tempList) {
+					canvas.getMessages().remove(m);
 				}
 			}
-			
-			// Delete all message that have a higher order! (correcting sequence diagram!)
-			ArrayList<Message> tempList = new ArrayList<Message>();
-			for(Message m :canvas.getMessages()) {
-				if( m.getOrder() > messageToDelete.getOrder() ) {
-					tempList.add(m);
-				}
-			}
-			for(Message m:tempList) {
-				canvas.getMessages().remove(m);
-			}
-			
-			
 			canvas.getMessages().remove(messageToDelete); //delete message itself
 			if(messageToDelete.getClass()==InvocationMessage.class){canvas.getResultQueue().remove(messageToDelete.getResult());}
 			canvas.updateLabels();
 		}
 		
-		//Update label positions of other messages
-		for (Message toUpdate : canvas.getMessages()) {
-			if (toUpdate.getClass() == Model.InvocationMessage.class) {
-				Label label = toUpdate.getLabel();
-				int labelX = label.getLabelPositionSequence().getX();
-				int labelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, toUpdate));
-				label.setLabelPositionSeq(new Point(labelX, labelY));
-			}
-		}
-		//Update Stack of Parties!
-		canvas.updateStack();
+		canvas.updateLabels();
 	}
-	
-	private static int getAmountPredecessors(Canvas canvas, Message message) {
-		int amount = 0;
-		for (Message m : canvas.getMessages()) {
-			if (m.getOrder() < message.getOrder())
-				amount++;
-		}
-		return amount;
-	}
-
 }

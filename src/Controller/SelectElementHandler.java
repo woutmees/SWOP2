@@ -48,9 +48,14 @@ public class SelectElementHandler extends Handler {
 			Label label = getLabelAt(x,y, canvas);	
 			Party party = getPartyAt(x,y,canvas);
 			if(label != null) {label.setSelected(true); return;}
-			else if (party!=null) {party.setSelected(true);}
-			if (canvas.isSequenceDiagram()){assignRoles(canvas, x);}
-			else {assignRoles(canvas,x,y);}
+			else if (party!=null) {
+				party.setSelected(true);
+			}
+			if (canvas.isSequenceDiagram()){
+				assignRolesSequence(canvas, x ,y );
+			} else {
+				assignRolesCommunication(canvas,x,y);
+			}
 		}
 		
 		// Mouse Pressed -> select element at coordinates
@@ -177,11 +182,12 @@ public class SelectElementHandler extends Handler {
 	 *  Else reset all roles
 	 */
 	
-	private static void assignRoles(Canvas canvas, int x) {
+	private static void assignRolesSequence(Canvas canvas, int x,int y) {
 		boolean sender = existsSender(canvas);
 		
 		for(Party p : canvas.getParties()) {
 			if(approxLifeLine(p,x)) {
+				p.setSelectedYPosition(y);
 				if(sender){p.makeReceiver();return;}
 				else{p.makeSender();return;}
 			}
@@ -193,7 +199,7 @@ public class SelectElementHandler extends Handler {
 		
 	}
 	
-	private static void assignRoles(Canvas canvas, int x, int y) {
+	private static void assignRolesCommunication(Canvas canvas, int x, int y) {
 		System.out.println("Assigning roles");
 		boolean sender = existsSender(canvas);
 		

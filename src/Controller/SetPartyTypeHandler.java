@@ -28,14 +28,6 @@ public class SetPartyTypeHandler extends Handler {
 			partyToAdd =  new Model.Object(changingParty.getClassName());
 		}
 		
-		//Find old party in stack -> replace it with new party
-		try {
-		int index = canvas.getPartyStack().lastIndexOf(changingParty);
-		canvas.getPartyStack().remove(index);
-		canvas.getPartyStack().add(index, partyToAdd);
-		} catch (Exception e) {
-			// Exception is thrown when the stack is empty
-		}
 		partyToAdd.setLabel(changingParty.getLabel());
 		partyToAdd.setPosComm(changingParty.getPosComm().getX(), changingParty.getPosComm().getY());
 		partyToAdd.setPosSeq(changingParty.getPosSeq().getX(), changingParty.getPosSeq().getY());

@@ -22,7 +22,6 @@ public class Canvas {
 	private int width;
 	private int height;
 	private ArrayList<ResultMessage> resultQueue = new ArrayList<ResultMessage>();
-	private  Stack<Party> sendingPartyStack = new Stack<Party>(); 
 	
 	/**
 	 * 
@@ -305,58 +304,6 @@ public class Canvas {
 		}
 	}
 	
-	public boolean checkSendingParty(Party p) {
-		try {
-			Party stackTop = sendingPartyStack.pop();
-			sendingPartyStack.add(stackTop);
-			return stackTop.equals(p) || (sendingPartyStack.size() == 0);
-		} catch (Exception e) {
-			if( (sendingPartyStack.size() == 0)) {
-				return true;
-			}
-			return false;
-		}
-	}
-	public boolean resultMessageCheck(Party sender, Party receiver) {
-		try {
-			Party top = sendingPartyStack.pop();
-			Party belowTop = sendingPartyStack.pop();
-			sendingPartyStack.push(belowTop);
-			sendingPartyStack.push(top);
-			return (top.equals(sender) && belowTop.equals(receiver));
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	public void deletePartyFromStack(Party p) {
-		try {
-			sendingPartyStack.pop();
-		} catch (Exception e)	{
-			
-		}
-	}
-	public void addPartyToStack(Party p ) {
-		try {
-			if(p != null && !p.equals(sendingPartyStack.lastElement())) 	{	sendingPartyStack.push(p); }
-		} catch (Exception e) {
-			if(p != null ) { sendingPartyStack.push(p); }
-		}
-	}
-	public void updateStack() {
-		LinkedList<Message> sortedListOfMessage = messageSort(new LinkedList<Message>(messages));
-		// New Stack is needed!
-		sendingPartyStack =  new Stack<Party>();  
-		for(Message m: sortedListOfMessage) {
-			Party sender = m.getSentBy();
-			Party receiver = m.getReicevedBy();
-			if(resultMessageCheck(sender,receiver)) {
-				deletePartyFromStack(sender);
-			} else {
-				addPartyToStack(sender);
-				addPartyToStack(receiver);
-			}
-		}
-	}
 	public static LinkedList<Message> messageSort(LinkedList<Message> unsortedMessages){
 		LinkedList<Message> sorted = new LinkedList<Message>();
 		int amount = unsortedMessages.size();
@@ -387,8 +334,4 @@ public class Canvas {
 		}
 		return min;
 	}
-	public Stack<Party> getPartyStack(){
-		return sendingPartyStack;
-	}
-	
 }

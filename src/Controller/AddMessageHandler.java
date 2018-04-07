@@ -1,5 +1,8 @@
 package Controller;
 
+import java.util.LinkedList;
+import java.util.Stack;
+
 import Model.Canvas;
 import Model.InvocationMessage;
 import Model.Label;
@@ -32,116 +35,59 @@ public class AddMessageHandler extends Handler {
 		if(sender==null || receiver==null) {return;}
 		
 		// Check if the sending party is allowed as sender
-		if(!canvas.checkSendingParty(sender)) {
+		if(!messageAllowed(canvas, sender,receiver)) {
 			// Reset roles
 			resetRoles(canvas);
 			return;
-		} else if(!canvas.resultMessageCheck(sender, receiver)){
+		} else {
 						
-	
-			// Invocation message is needed!
-			canvas.addPartyToStack(sender);
-			canvas.addPartyToStack(receiver);
-			
 			// Create Invocation Message
 			InvocationMessage invocationMessage = new InvocationMessage(null, null);
 			invocationMessage.setSentBy(sender);
 			invocationMessage.setReicevedBy(receiver);
-			invocationMessage.setOrder((getMaxOrder(canvas)+1));
-			//invocationMessage.setResult(resultMessage);
-			
-			//Add messages
-			Label labelInvocation = new Label("   ");
-			labelInvocation.setSelected(true);
-			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
-			int invocLabelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
-			labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
-			EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
-			invocationMessage.setLabel(labelInvocation);
-			canvas.addMessage(invocationMessage); 
-			
-		} else {
-			// ResultMessage is needed!
-						
-			canvas.deletePartyFromStack(sender);
-			
-			// Create Result Message
-			ResultMessage resultMessage = new ResultMessage(null);
-			resultMessage.setSentBy(sender);
-			resultMessage.setReicevedBy(receiver);
-			resultMessage.setOrder((getMaxOrder(canvas)+1));
-			
-			int order = 0;
-			InvocationMessage message = null;
-			for( Message m : canvas.getMessages()) {
-				if(m.getClass() == Model.InvocationMessage.class && m.getReicevedBy().equals(sender) && m.getSentBy().equals(receiver) && m.getOrder() >= order) {
-					message = (InvocationMessage) m;
-					order = m.getOrder();
-				}
+					
+			Message foundMessage = findMessage(canvas, sender, receiver);
+			if( foundMessage == null ) {
+				invocationMessage.setOrder(getMaxOrder(canvas)+1); 
+			} else {
+				updateOrderMessages(canvas, foundMessage);
+				invocationMessage.setOrder(foundMessage.getOrder()+1);
 			}
-			if(message != null) { message.setResult(resultMessage); }
-			
-			canvas.addMessage(resultMessage);
-			
-		}
-		// Reset roles
-		resetRoles(canvas);
-		return;
-		
-		/**
-		
-		// Check For Matching ResultMessage In Queue
-		ResultMessage result = canvas.searchResultQueue(sender, receiver);
-		if(result != null) {
-			
-			//Set Order
-			result.setOrder((getMaxOrder(canvas)+1));
-			
-			// Add ResultMessage to Canvas
-			canvas.addMessage(result);
-			
-			// Delete result from queue
-			canvas.getResultQueue().remove(result);
-
-			// Reset roles
-			resetRoles(canvas);
-			return;
-		}
-		
-		else {
-			
+					
+			canvas.addMessage(invocationMessage); 
+										
 			// Create Result Message
 			ResultMessage resultMessage = new ResultMessage(null);
 			resultMessage.setSentBy(receiver);
 			resultMessage.setReicevedBy(sender);
-			
-			// Create Invocation Message
-			InvocationMessage invocationMessage = new InvocationMessage(null, null);
-			invocationMessage.setSentBy(sender);
-			invocationMessage.setReicevedBy(receiver);
-			invocationMessage.setOrder((getMaxOrder(canvas)+1));
+			resultMessage.setOrder((invocationMessage.getOrder()+1));
 			invocationMessage.setResult(resultMessage);
 			
-			// Put Result In Queue
-			canvas.addMessageResultQueue(resultMessage);
+			canvas.addMessage(resultMessage);
 			
-			//Add messages
+			// Handle Invocation Message
 			Label labelInvocation = new Label("   ");
 			labelInvocation.setSelected(true);
 			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
 			int invocLabelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
 			labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
+			
+			// First all the orders needs to be updated because of the number of predecessors
+			for (Message m : canvas.getMessages()) {
+				if( m.getClass()==Model.InvocationMessage.class) {
+					m.getLabel().setLabelPositionSeq(m.getLabel().getLabelPositionSequence().getX(), canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, m)));
+				}
+			}
+			
+			
 			EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
 			invocationMessage.setLabel(labelInvocation);
-			canvas.addMessage(invocationMessage);
-			
-			// Reset roles
-			resetRoles(canvas);
-			return;
-			
+					
 		}
-		*/
-		
+		// Reset roles
+		resetRoles(canvas);
+		return;
+			
 	}
 	
 	private static int getMaxOrder(Canvas canvas) {
@@ -173,6 +119,86 @@ public class AddMessageHandler extends Handler {
 				amount++;
 		}
 		return amount;
+	}
+	private static boolean messageAllowed(Canvas canvas,Party sender, Party receiver) {
+		int firstClick = sender.getSelectedYPosition();
+		int secondClick = receiver.getSelectedYPosition();
+		int difference = Math.abs((firstClick-secondClick));	
+		
+		Stack<Party> stackParties = new Stack<Party>();
+		LinkedList<Message> messages = new LinkedList<Message>();
+		messages.addAll(canvas.getMessages());
+		LinkedList<Message>  sortedList = Model.Canvas.messageSort(messages);
+		
+		if(sortedList.isEmpty()) {
+			return true;
+		}
+		
+		// Height for messages used in sequence diagram=======
+		if ( (difference > 50)) {
+			return false;
+		}
+		// ===================================================
+
+		Message firstMessage = sortedList.getFirst();
+		stackParties.push(firstMessage.getSentBy());
+		
+		Message lastMessage =  null;
+		Message lastMessagePlusOne = null;
+		for (Message m : sortedList) {
+			int yPostionMessage = canvas.getHeight()/6 + 50 + (50 * getAmountPredecessors(canvas,m));
+			int YUpper = yPostionMessage + 49;
+			if ( firstClick > yPostionMessage && secondClick > yPostionMessage && firstClick < YUpper && secondClick < YUpper ) {
+				stackParties.push(m.getReicevedBy());
+				lastMessage = m;
+			} else if ( firstClick > yPostionMessage && secondClick > yPostionMessage) {
+				stackParties.push(m.getReicevedBy());
+			}  else  {
+				lastMessagePlusOne = m;
+				break;
+			}
+		}
+		
+		try {
+			Party topStack = stackParties.pop();
+			Party belowTop = stackParties.pop();
+
+		if( topStack ==  sender ) {
+			if (belowTop == receiver && lastMessage.getClass().equals(Model.InvocationMessage.class)) {
+				return false;
+			} else if ( lastMessagePlusOne != null &&lastMessagePlusOne.getReicevedBy() == receiver && lastMessagePlusOne.getClass() == Model.ResultMessage.class) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		} catch (Exception e) {
+			
+		}
+		return false;
+	}
+	//update order of the messages => all messages who have a higher order than the received message get a order of +2 
+	private static void updateOrderMessages(Canvas canvas, Message message) {
+		for (Message m  : canvas.getMessages()) {
+			if( m.getOrder() > message.getOrder()) {
+				m.setOrder(m.getOrder()+2);
+			}
+		}
+	}
+	// find the 2 messages where the Invocation and ResultMessage must be placed in between => Returns the first Message(lowest order)
+	private static Message findMessage(Canvas canvas, Party sender, Party receiver) {
+		LinkedList<Message> messages = new LinkedList<Message>();
+		messages.addAll(canvas.getMessages());
+		for ( Message m : messages) {
+			// Height for messages used in sequence diagram=======
+			int y = canvas.getHeight()/6 + 50 + (50 * getAmountPredecessors(canvas,m));
+			int upperY = y + 49;
+			// ===================================================
+			if( (m.getReicevedBy()== sender) && (receiver.getSelectedYPosition() > y) && (sender.getSelectedYPosition() > y) && (receiver.getSelectedYPosition() < upperY) && (sender.getSelectedYPosition() < upperY)) {
+				return m;
+			}
+		}
+		return null;
 	}
 	
 }

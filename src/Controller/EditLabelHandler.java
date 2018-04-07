@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import Model.Canvas;
 import Model.Label;
+import Model.Message;
 import Model.Party;
 import Model.Point;
 
@@ -115,10 +116,18 @@ public class EditLabelHandler {
 		return false;
 	}
 	
-	static public boolean editLabelMode(Canvas  canvas) {
+	static public boolean editLabelModeParty(Canvas  canvas) {
 		for(Party p : canvas.getParties()){
 			if(p.getLabel().getSelected()) {
 				return !(isCorrectPartyLabel(p.getLabel().getLabelname()));
+			}
+		}
+		return false;
+	}
+	static public boolean editLabelModeMessage(Canvas canvas) {
+		for( Message m : canvas.getMessages()) {
+			if( m.getClass() == Model.InvocationMessage.class && m.getLabel().getSelected()) {
+				return true;
 			}
 		}
 		return false;
