@@ -43,6 +43,10 @@ public class SelectElementHandler extends Handler {
 	public static void handle(Canvas canvas, int x, int y, Mouse id) {
 		
 		if(id==Mouse.SINGLECLICK) {
+			
+			// LET OP!
+			deselectAll(canvas);
+			
 			Label l = getLabelAt(x, y, canvas);
 			Party p = getPartyAt(x, y, canvas);
 			
