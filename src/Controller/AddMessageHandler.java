@@ -186,7 +186,7 @@ public class AddMessageHandler extends Handler {
 			Party belowTop = stackParties.pop();
 
 		if( topStack ==  sender ) {
-			if (belowTop == receiver && lastMessage.getClass().equals(Model.InvocationMessage.class)) {
+			if (belowTop == receiver && lastMessage != null && lastMessage.getClass().equals(Model.InvocationMessage.class)) {
 				return false;
 			} else if ( lastMessagePlusOne != null &&lastMessagePlusOne.getReicevedBy() == receiver && lastMessagePlusOne.getClass() == Model.ResultMessage.class) {
 				return false;
