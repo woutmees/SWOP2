@@ -1,4 +1,5 @@
 package Controller;
+import Controller.SelectElementHandler.Mouse;
 import Model.*;
 import Model.Canvas.Mode;
 
@@ -68,7 +69,11 @@ public class SelectElementHandler extends Handler {
 				System.out.println("AddMessageMode");
 				System.out.println("LifeLine SELECTED: "+lifeLine.getSelected());}
 			}
-		
+		else if ( id == Mouse.RELEASED && canvas.getMode() == Mode.ADDMESSAGE){
+			resetRoles(canvas);
+			canvas.setDefaultMode();
+			System.out.println("######## Releasing Button + Editing Label Message ########");
+		}
 		else if(id == Mouse.RELEASED && canvas.getMode()!=Mode.DEFAULT) {
 			deselectAll(canvas);
 			resetRoles(canvas);
