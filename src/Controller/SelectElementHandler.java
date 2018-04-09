@@ -55,8 +55,18 @@ public class SelectElementHandler extends Handler {
 			if(existsSender(canvas)) {return;}
 			Party p = getPartyAt(x, y, canvas); if(p==null) {System.out.println("NUll_1");}
 			Party lifeLine = approxLifeLine(x, canvas); if(lifeLine==null) {System.out.println("NULL_2");}
-			if(p  != null) {canvas.setMovePartyMode();p.setSelected(true);System.out.println("MovePartyMode");System.out.println("PARTY SELECTED: "+p.getSelected());}
-			else if(lifeLine != null){canvas.setAddMessageMode();lifeLine.setSelected(true);lifeLine.makeSender();System.out.println("AddMessageMode");System.out.println("LifeLine SELECTED: "+lifeLine.getSelected());}
+			if(p  != null) {
+				canvas.setMovePartyMode();
+				p.setSelected(true);
+				System.out.println("MovePartyMode");
+				System.out.println("PARTY SELECTED: "+p.getSelected());}
+			else if(lifeLine != null){
+				canvas.setAddMessageMode();
+				lifeLine.setSelected(true);
+				lifeLine.makeSender();
+				lifeLine.setSelectedYPosition(y);
+				System.out.println("AddMessageMode");
+				System.out.println("LifeLine SELECTED: "+lifeLine.getSelected());}
 			}
 		
 		else if(id == Mouse.RELEASED && canvas.getMode()!=Mode.DEFAULT) {

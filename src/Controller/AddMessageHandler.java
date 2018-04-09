@@ -28,7 +28,10 @@ public class AddMessageHandler extends Handler {
 		
 		// Determine receiver
 		for(Party r : canvas.getParties()) {
-			if(approxLifeLine(r, x)) {receiver = r; break;}
+			if(approxLifeLine(r, x)) {
+				receiver = r;
+				r.setSelectedYPosition(y);
+				break;}
 		}
 		
 		// Determine sender
