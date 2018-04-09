@@ -142,6 +142,8 @@ public class AddMessageHandler extends Handler {
 		int secondClick = receiver.getSelectedYPosition();
 		int difference = Math.abs((firstClick-secondClick));	
 		
+		if(sender==receiver) {return false;}
+		
 		Stack<Party> stackParties = new Stack<Party>();
 		LinkedList<Message> messages = new LinkedList<Message>();
 		messages.addAll(canvas.getMessages());
