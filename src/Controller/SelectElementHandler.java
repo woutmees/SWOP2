@@ -1,5 +1,6 @@
 package Controller;
 import Model.*;
+import Model.Canvas.Mode;
 
 /**
  * A handler that handles the actions of an element being selected.
@@ -14,14 +15,14 @@ public class SelectElementHandler extends Handler {
 	 * id = 0 : Mouse Clicked 
 	 * -> If mouse coordinates in label
 	 * 		Then select label
-	 *    Else If x is on party lifeline
-	 * 		Then select lifeline
 	 * 	  Else do nothing
 	 * 
 	 * 
 	 * id = 1 : Mouse Pressed
 	 * -> If mouse coordinates in party
 	 * 		Then select party
+	 * 	  Else If x is on party lifeline
+	 * 		Then select lifeline
 	 * 	  Else do nothing
 	 * 
 	 * id = 2 : Mouse Released
@@ -38,39 +39,47 @@ public class SelectElementHandler extends Handler {
 	 * @param y				The y coordinate of the mouse event used to handle these events.
 	 * @param id			The kind of mouse event.
 	 */
-	public static void handle(Canvas canvas, int x, int y, int id) {
+	public static void handle(Canvas canvas, int x, int y, Mouse id) {
 		
-		// Deselect all elements
-		deselectAll(canvas);
+		if(id==Mouse.SINGLECLICK) {
+			Label l = getLabelAt(x, y, canvas);
+			Party p = getPartyAt(x, y, canvas);
+			
+			if(p == null && l == null) {deselectAll(canvas);}
+			
+			if(l!=null) {l.setSelected(true);}
+			if(p!=null) {p.setSelected(true);}
+		}
 		
-		// Mouse Clicked -> select element at coordinates
-		if(id == 0) {
-			Label label = getLabelAt(x,y, canvas);	
-			Party party = getPartyAt(x,y,canvas);
-			if(label != null) {label.setSelected(true); return;}
-			else if (party!=null) {
-				party.setSelected(true);
+		else if(id == Mouse.PRESSED) {
+			if(existsSender(canvas)) {return;}
+			Party p = getPartyAt(x, y, canvas); if(p==null) {System.out.println("NUll_1");}
+			Party lifeLine = approxLifeLine(x, canvas); if(lifeLine==null) {System.out.println("NULL_2");}
+			if(p  != null) {canvas.setMovePartyMode();p.setSelected(true);System.out.println("MovePartyMode");System.out.println("PARTY SELECTED: "+p.getSelected());}
+			else if(lifeLine != null){canvas.setAddMessageMode();lifeLine.setSelected(true);lifeLine.makeSender();System.out.println("AddMessageMode");System.out.println("LifeLine SELECTED: "+lifeLine.getSelected());}
 			}
-			if (canvas.isSequenceDiagram()){
-				assignRolesSequence(canvas, x ,y );
-			} else {
-				assignRolesCommunication(canvas,x,y);
-			}
-		}
 		
-		// Mouse Pressed -> select element at coordinates
-		else if(id == 1) {
-			Party party = getPartyAt(x,y,canvas);
-			if(party!=null) {party.setSelected(true);}
+		else if(id == Mouse.RELEASED && canvas.getMode()!=Mode.DEFAULT) {
+			deselectAll(canvas);
+			resetRoles(canvas);
+			canvas.setDefaultMode();
+			System.out.println("######## Releasing Button ########");
 		}
-		
-		// Mouse Released -> Deselect all elements
-		else if(id == 2) {
-			deselectParties(canvas);
-		}
-		
 	}
 	
+	private static void resetRoles(Canvas canvas) {
+		for(Party p : canvas.getParties()) {
+			p.makeNone();
+		}
+	}
+
+	private static Party approxLifeLine(int x, Canvas canvas) {
+		for(Party p : canvas.getParties()) {
+			if(approxLifeLine(p, x)) {return p;}
+		}
+		return null;
+	}
+
 	private static void deselectAll(Canvas canvas) {
 		deselectParties(canvas);
 		deselectMessages(canvas);
@@ -245,5 +254,7 @@ public class SelectElementHandler extends Handler {
 		return (p.getPosSeq().xCoordinate-30)<x &&
 				(p.getPosSeq().xCoordinate+30)>x;
 	}
+	
+	public enum Mouse{SINGLECLICK, PRESSED, RELEASED}
 	
 }

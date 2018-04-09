@@ -8,7 +8,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import Controller.SelectElementHandler.Mouse;
 import Model.Canvas;
+import Model.Canvas.Mode;
 import Model.Message;
 import Model.Party;
 import Model.ResultMessage;
@@ -64,28 +67,53 @@ public class MyCanvasWindow extends CanvasWindow{
 	 */
 	@Override
 	protected void handleMouseEvent(int id, int x, int y, int clickCount){
+		System.out.println("######## "+canvas.getMode()+" ########");
 		if(!EditLabelHandler.editLabelModeParty(canvas)) {
-		switch(id){
-		case MouseEvent.MOUSE_DRAGGED:
-			SelectElementHandler.handle(canvas, x, y, 1);
-			MovePartyHandler.handle(canvas, x, y);
-			SelectElementHandler.handle(canvas, x, y, 2);
-			case MouseEvent.MOUSE_CLICKED:	
-			if(clickCount == 1){
+			switch(id){
+			
+			case MouseEvent.MOUSE_RELEASED:
+				if(canvas.getMode()==Mode.ADDMESSAGE) {System.out.println("######## Handling Message ########");AddMessageHandler.handle(canvas, x, y);}
+				if(canvas.getMode()==Mode.ADDMESSAGE || canvas.getMode()==Mode.MOVEPARTY) {SelectElementHandler.handle(canvas, x, y, Mouse.RELEASED);break;}
+			
+			case MouseEvent.MOUSE_DRAGGED:
+				if(canvas.getMode()==Mode.MOVEPARTY) {MovePartyHandler.handle(canvas, x, y);break;}
+			
+				
+			case MouseEvent.MOUSE_PRESSED:
+				SelectElementHandler.handle(canvas, x, y, Mouse.PRESSED);break;	
+			
+			case MouseEvent.MOUSE_CLICKED:
+				if(clickCount == 1) {
+					SelectElementHandler.handle(canvas, x, y, Mouse.SINGLECLICK);break; 
+				} else if(clickCount == 2) {
+					if(!EditLabelHandler.editLabelModeMessage(canvas)) {
+						if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);break;}
+						else{AddPartyHandler.handle(canvas, x, y);break;}
+					}
+				}
+			
+			/**
+			case MouseEvent.MOUSE_PRESSED:
+				SelectElementHandler.handle(canvas, x, y, 0);
+			case MouseEvent.MOUSE_RELEASED:
 				SelectElementHandler.handle(canvas, x, y, 0);
 				AddMessageHandler.handle(canvas, x, y);
-			} else if(clickCount == 2){
-				// First check if the a message label is already editing.
-				if( !EditLabelHandler.editLabelModeMessage(canvas)) {
-					if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);}
-					else{AddPartyHandler.handle(canvas, x, y);}
-				}
-			}
-			break;
-		}
-		for(Party p:canvas.getParties()) {
-			System.out.println(p.getRole());
-		}
+			case MouseEvent.MOUSE_DRAGGED:
+				SelectElementHandler.handle(canvas, x, y, 1);
+				MovePartyHandler.handle(canvas, x, y);
+				SelectElementHandler.handle(canvas, x, y, 2);
+			case MouseEvent.MOUSE_CLICKED:	
+				if(clickCount == 1){
+					SelectElementHandler.handle(canvas, x, y, 0);
+				} else if(clickCount == 2){
+					// First check if the a message label is already editing.
+					if( !EditLabelHandler.editLabelModeMessage(canvas)) {
+						if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);}
+						else{AddPartyHandler.handle(canvas, x, y);}
+					}
+				}**/
+				break;
+			}	
 		}
 		repaint();
 	

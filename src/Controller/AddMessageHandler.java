@@ -26,11 +26,22 @@ public class AddMessageHandler extends Handler {
 		Party sender = null;
 		Party receiver = null;
 		
-		// Determine sender/receiver
+		// Determine receiver
+		for(Party r : canvas.getParties()) {
+			if(approxLifeLine(r, x)) {receiver = r; break;}
+		}
+		
+		// Determine sender
 		for(Party p : canvas.getParties()) {
 			if(p.getRole()=="sender") {sender = p;}
-			else if(p.getRole()=="receiver") {receiver = p;}
 		}
+		
+		if(sender==null) {System.out.println("Sender is NULL");}
+		else {System.out.println("Sender is Instantiated");}
+		
+		if(receiver==null) {System.out.println("Receiver is NULL");}
+		else {System.out.println("Receiver is Instantiated");}
+		
 		
 		if(sender==null || receiver==null) {return;}
 		
@@ -38,6 +49,7 @@ public class AddMessageHandler extends Handler {
 		if(!messageAllowed(canvas, sender,receiver)) {
 			// Reset roles
 			resetRoles(canvas);
+			System.out.println("########## Message not allowed ##########");
 			return;
 		} else {
 						
@@ -90,6 +102,11 @@ public class AddMessageHandler extends Handler {
 			
 	}
 	
+	private static boolean approxLifeLine(Party p, int x) {
+		return (p.getPosSeq().xCoordinate-30)<x &&
+				(p.getPosSeq().xCoordinate+30)>x;
+	}
+
 	private static int getMaxOrder(Canvas canvas) {
 		int max = 0;
 		for(Message m : canvas.getMessages()) {

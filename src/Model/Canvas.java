@@ -22,6 +22,8 @@ public class Canvas {
 	private int width;
 	private int height;
 	private ArrayList<ResultMessage> resultQueue = new ArrayList<ResultMessage>();
+	private Mode mode = Mode.DEFAULT;
+	private View view = View.SEQUENCE;
 	
 	/**
 	 * 
@@ -30,11 +32,53 @@ public class Canvas {
 	 * @param width
 	 * @param height
 	 */
+	
 	public Canvas(int width, int height) {
 		this.parties = new HashSet<Party>();
 		this.messages = new HashSet<Message>();
 		this.width = width;
 		this.height = height;
+	}
+
+	public enum Mode{EDITPARTY, EDITMESSAGE, MOVEPARTY, ADDMESSAGE, DEFAULT}
+	
+	public Mode getMode() {
+		return mode;
+	}
+	
+	public void setEditPartyMode() {
+		mode = Mode.EDITPARTY;
+	}
+	
+	public void setEditMessageMode() {
+		mode = Mode.EDITMESSAGE;
+	}
+	
+	public void setMovePartyMode() {
+		mode = Mode.MOVEPARTY;
+	}
+	
+	public void setAddMessageMode() {
+		mode = Mode.ADDMESSAGE;
+	}
+	
+	public void setDefaultMode() {
+		mode = Mode.DEFAULT;
+	}
+	
+	
+	public enum View{SEQUENCE, COMMUNICATION}
+	
+	public View getView() {
+		return view;
+	}
+	
+	public void setSequenceDiagram() {
+		view = View.SEQUENCE;
+	}
+	
+	public void setCommunicationDiagram() {
+		view = View.COMMUNICATION;
 	}
 	
 	public ArrayList<ResultMessage> getResultQueue() {
@@ -334,4 +378,5 @@ public class Canvas {
 		}
 		return min;
 	}
+	
 }
