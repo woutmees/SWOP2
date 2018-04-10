@@ -1,7 +1,7 @@
 package Controller;
-import Controller.SelectElementHandler.Mouse;
+import Controller.Mouse;
 import Model.*;
-import Model.Canvas.Mode;
+import Model.Mode;
 
 /**
  * A handler that handles the actions of an element being selected.
@@ -273,7 +273,5 @@ public class SelectElementHandler extends Handler {
 		return (p.getPosSeq().xCoordinate-30)<x &&
 				(p.getPosSeq().xCoordinate+30)>x;
 	}
-	
-	public enum Mouse{SINGLECLICK, PRESSED, RELEASED}
 	
 }

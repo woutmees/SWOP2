@@ -39,8 +39,6 @@ public class Canvas {
 		this.width = width;
 		this.height = height;
 	}
-
-	public enum Mode{EDITPARTY, EDITMESSAGE, MOVEPARTY, ADDMESSAGE, DEFAULT}
 	
 	public Mode getMode() {
 		return mode;

@@ -9,9 +9,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import Controller.SelectElementHandler.Mouse;
+import Controller.Mouse;
 import Model.Canvas;
-import Model.Canvas.Mode;
+import Model.Mode;
 import Model.Message;
 import Model.Party;
 import Model.ResultMessage;
