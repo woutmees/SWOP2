@@ -41,11 +41,16 @@ public class SequenceDiagram extends View {
 		*/ 
 		g.setClip(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
 		
+		// draw TitleBar(title + close Button)
+		
+		titleBar bar = new titleBar();
+		bar.draw(c, g);
+		
 		// ------------------------------------------
 		
 		//Draw the "Parties" box.
-		g.drawRect(10, 10, c.getWidth()-20, c.getHeight()/6);
-		g.drawString("Parties", 20, 20);
+		g.drawRect(10, 30, c.getWidth()-20, c.getHeight()/6);
+		g.drawString("Parties", 20, 40);
 		
 		
 		//Draw all parties, their lifelines and their labels.
