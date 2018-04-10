@@ -70,6 +70,9 @@ public class SelectElementHandler extends Handler {
 				canvas.setOrigineX(x-(titleBar.getWidth(canvas)/2));
 				canvas.setOrigineY(y-(titleBar.getHeight()/2));
 			}
+			else if( resizeCornerCanvas(canvas, x, y)) {
+				canvas.resizeCornerCanvas(x,y);
+			}
 			else if( resizeXCanvas(canvas,x) ) {
 				canvas.resizeXCanvas(x);
 			}
@@ -328,6 +331,16 @@ public class SelectElementHandler extends Handler {
 		int yLow = canvas.getOrigineY() + canvas.getHeight() -4;
 		int yHigh = yLow + 8;
 		if(yMouse  >= yLow && yMouse <= yHigh) {
+			return true;
+		}
+		return false;
+	}
+	public static boolean resizeCornerCanvas(Canvas canvas, int xMouse, int yMouse) {
+		int xLow = canvas.getOrigineX() + canvas.getWidth() - 4;
+		int xHigh = xLow + 8;
+		int yLow = canvas.getOrigineY() + canvas.getHeight() -4;
+		int yHigh = yLow + 8;
+		if ( xMouse >= xLow && xMouse <= xHigh && yMouse  >= yLow && yMouse <= yHigh) {
 			return true;
 		}
 		return false;

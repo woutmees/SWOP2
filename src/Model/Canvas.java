@@ -433,5 +433,14 @@ public class Canvas {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+
+	public void resizeCornerCanvas(int xMouse, int yMouse) {
+		if(yMouse > titleBar.getHeight() ) {
+			this.height = yMouse - this.getOrigineY();
+		}
+		if(xMouse > titleBar.getWidth(this) ) {
+			this.width = xMouse - this.getOrigineX();
+		}
+	}
 	
 }
