@@ -1,9 +1,4 @@
-package Controller;
-
-import Model.Canvas;
-import Model.Label;
-import Model.Object;
-import Model.Point;
+package Model;
 
 /**
  * A handler that handles the actions of a party being added.

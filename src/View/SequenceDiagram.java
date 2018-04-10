@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
 import Model.Actor;
 import Model.Canvas;
 import Model.Label;

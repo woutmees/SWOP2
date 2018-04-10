@@ -1,25 +1,19 @@
-package Controller;
+package Model;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import Model.Canvas;
-import Model.InvocationMessage;
-import Model.Label;
-import Model.Message;
-import Model.Party;
-import Model.Point;
 
 /**
  * A handler that handles the actions of an element being deleted.
  */
-public class DeleteElementHandler extends Handler {
+public class DeleteElementHandler {
 	
 	/**
 	 * Handles an element being deleted on the canvas.
 	 * @param canvas		The canvas to edit.
 	 */
-	@Override
-	public void handle(Canvas canvas) {
+	
+	public static void handle(Canvas canvas) {
 		LinkedList<Party> toDeleteParties = new LinkedList<Party>();
 		LinkedList<Message> toDeleteMessages = new LinkedList<Message>();
 		

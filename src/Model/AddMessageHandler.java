@@ -1,15 +1,7 @@
-package Controller;
+package Model;
 
 import java.util.LinkedList;
 import java.util.Stack;
-
-import Model.Canvas;
-import Model.InvocationMessage;
-import Model.Label;
-import Model.Message;
-import Model.Party;
-import Model.Point;
-import Model.ResultMessage;
 
 /**
  * A handler handles the actions of a message being added to the canvas.

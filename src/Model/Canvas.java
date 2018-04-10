@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import Controller.AddMessageHandler;
-
 /**
  * 
  * A system of parties and messages and their connection between them 
@@ -27,6 +25,7 @@ public class Canvas {
 	private int origineX;
 	private int origineY;
 	private titleBar titleBar;
+	private Interaction interaction = null; //TODO Constructor
 	
 	/**
 	 * 
@@ -402,6 +401,10 @@ public class Canvas {
 
 	public void setTitleBar(titleBar titleBar) {
 		this.titleBar = titleBar;
+	}
+
+	public Interaction getInteraction() {
+		return interaction;
 	}
 	
 }

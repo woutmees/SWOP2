@@ -10,11 +10,21 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import Controller.Mouse;
+import Model.AddMessageHandler;
+import Model.AddPartyHandler;
 import Model.Canvas;
+import Model.DeleteElementHandler;
+import Model.EditLabelHandler;
+import Model.Handler;
 import Model.Mode;
+import Model.MovePartyHandler;
 import Model.Message;
 import Model.Party;
 import Model.ResultMessage;
+import Model.Screen;
+import Model.SelectElementHandler;
+import Model.SetPartyTypeHandler;
+import Model.SwitchViewHandler;
 import View.CommunicationDiagram;
 import View.SequenceDiagram;
 import View.View;
@@ -69,51 +79,19 @@ public class MyCanvasWindow extends CanvasWindow{
 	protected void handleMouseEvent(int id, int x, int y, int clickCount){
 		System.out.println("######## "+canvas.getMode()+" ########");
 		if(!EditLabelHandler.editLabelModeParty(canvas)) {
-			switch(id){
 			
-			case MouseEvent.MOUSE_RELEASED:
-				if(canvas.getMode()==Mode.ADDMESSAGE) {System.out.println("######## Handling Message ########");AddMessageHandler.handle(canvas, x, y);}
-				if(canvas.getMode()==Mode.ADDMESSAGE || canvas.getMode()==Mode.MOVEPARTY) {SelectElementHandler.handle(canvas, x, y, Mouse.RELEASED);break;}
-			
-			case MouseEvent.MOUSE_DRAGGED:
-				if(canvas.getMode()==Mode.MOVEPARTY) {MovePartyHandler.handle(canvas, x, y);break;}
-			
-				
-			case MouseEvent.MOUSE_PRESSED:
-				SelectElementHandler.handle(canvas, x, y, Mouse.PRESSED);break;	
+			switch(id) {
 			
 			case MouseEvent.MOUSE_CLICKED:
-				if(clickCount == 1) {
-					SelectElementHandler.handle(canvas, x, y, Mouse.SINGLECLICK);break; 
-				} else if(clickCount == 2) {
-					if(!EditLabelHandler.editLabelModeMessage(canvas)) {
-						if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);break;}
-						else{AddPartyHandler.handle(canvas, x, y);break;}
-					}
-				}
-			
-			/**
+				if(clickCount == 1) {screen.mouseClicked(Mouse.SINGLECLICK, x, y);}
+				if(clickCount == 2) {screen.mouseClicked(Mouse.DOUBLECLICK, x, y);}
 			case MouseEvent.MOUSE_PRESSED:
-				SelectElementHandler.handle(canvas, x, y, 0);
-			case MouseEvent.MOUSE_RELEASED:
-				SelectElementHandler.handle(canvas, x, y, 0);
-				AddMessageHandler.handle(canvas, x, y);
+				screen.mouseClicked(Mouse.PRESSED, x, y);
 			case MouseEvent.MOUSE_DRAGGED:
-				SelectElementHandler.handle(canvas, x, y, 1);
-				MovePartyHandler.handle(canvas, x, y);
-				SelectElementHandler.handle(canvas, x, y, 2);
-			case MouseEvent.MOUSE_CLICKED:	
-				if(clickCount == 1){
-					SelectElementHandler.handle(canvas, x, y, 0);
-				} else if(clickCount == 2){
-					// First check if the a message label is already editing.
-					if( !EditLabelHandler.editLabelModeMessage(canvas)) {
-						if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);}
-						else{AddPartyHandler.handle(canvas, x, y);}
-					}
-				}**/
-				break;
-			}	
+				screen.mouseClicked(Mouse.DRAGGED, x, y);
+			case MouseEvent.MOUSE_RELEASED:
+				screen.mouseClicked(Mouse.RELEASED, x, y);
+			}
 		}
 		repaint();
 	
@@ -127,51 +105,12 @@ public class MyCanvasWindow extends CanvasWindow{
 	 */
 	@Override
 	protected void handleKeyEvent(int id, int keyCode, char keyChar){
-		Handler handler;
-		if(id == KeyEvent.KEY_PRESSED && !EditLabelHandler.editLabelModeParty(canvas)) {
-			switch(keyCode){
-			case KeyEvent.VK_TAB:
-				System.out.println("TAB");
-				handler = new SwitchViewHandler();
-				handler.handle(canvas);
-				break;
-			case KeyEvent.VK_ENTER:
-				System.out.println("ENTER");
-				break;
-
-			case KeyEvent.VK_DELETE:
-				System.out.println("DELETE");
-				handler = new DeleteElementHandler();
-				handler.handle(canvas);
-			default:
-				break;
-			}
-		} else if (id == KeyEvent.KEY_TYPED) {
-			boolean found = false;
-			for(Party p : canvas.getParties()){
-				if(p.getLabel().getSelected()) {
-					found = true;
-					if(canvas.isSequenceDiagram())
-						EditLabelHandler.handle(canvas, p.getLabel(), p, keyChar, p.getLabel().getLabelPositionSequence().getX(), p.getLabel().getLabelPositionSequence().getY());
-					else 
-						EditLabelHandler.handle(canvas, p.getLabel(), p, keyChar, p.getLabel().getLabelPositionComm().getX(), p.getLabel().getLabelPositionComm().getY());
-					break;
-				}
-			}
-			for(Message m : canvas.getMessages()){
-				if(m.getLabel().getSelected()) {
-					if(canvas.isSequenceDiagram())
-						EditLabelHandler.handle(canvas, m.getLabel(), keyChar, m.getLabel().getLabelPositionSequence().getX(), m.getLabel().getLabelPositionSequence().getY());
-					else 
-						EditLabelHandler.handle(canvas, m.getLabel(), keyChar, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
-					break;
-				}
-			}
-		}
+		screen.keyPressed(id, keyCode, keyChar);
 		repaint();
 	}
 	
 	private Canvas canvas = new Canvas(width, height);
+	private Screen screen = new Screen();
 	
 	/**
 	 * Gives the used canvas.

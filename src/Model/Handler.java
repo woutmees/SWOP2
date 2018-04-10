@@ -1,7 +1,4 @@
-package Controller;
-
-import Model.Canvas;
-import Model.Party;
+package Model;
 
 /**
  * A sequence of actions that change the state of a canvas.

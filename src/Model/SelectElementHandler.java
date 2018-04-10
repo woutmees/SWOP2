@@ -1,7 +1,6 @@
-package Controller;
+package Model;
 import Controller.Mouse;
 import Model.*;
-import Model.Mode;
 
 /**
  * A handler that handles the actions of an element being selected.

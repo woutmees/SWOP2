@@ -1,9 +1,4 @@
-package Controller;
-
-import Model.Canvas;
-import Model.Label;
-import Model.Message;
-import Model.Party;
+package Model;
 
 /**
  * A handler that handles the actions of a party changing its type.

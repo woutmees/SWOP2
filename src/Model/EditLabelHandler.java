@@ -1,12 +1,6 @@
-package Controller;
+package Model;
 
 import java.awt.event.KeyEvent;
-
-import Model.Canvas;
-import Model.Label;
-import Model.Message;
-import Model.Party;
-import Model.Point;
 
 /**
  * A handler that handles the actions of a label being edited.
