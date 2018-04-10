@@ -55,6 +55,11 @@ public class CommunicationDiagram extends View {
 		*/ 
 		g.setClip(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
 		
+		// draw TitleBar(title + close Button)
+		
+		titleBar bar = new titleBar();
+		bar.draw(c, g);
+		
 		// ------------------------------------------
 		this.parties = c.getParties();
 		this.messages = c.getMessages();

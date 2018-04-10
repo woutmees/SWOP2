@@ -49,8 +49,8 @@ public class SequenceDiagram extends View {
 		// ------------------------------------------
 		
 		//Draw the "Parties" box.
-		g.drawRect(10, 30, c.getWidth()-20, c.getHeight()/6);
-		g.drawString("Parties", 20, 40);
+		g.drawRect(c.getOrigineX()+10,  c.getOrigineY()+ 30, c.getOrigineY()+ c.getWidth()-20,  c.getOrigineY()+c.getHeight()/6);
+		g.drawString("Parties", c.getOrigineX()+ 20, c.getOrigineY()+ 40);
 		
 		
 		//Draw all parties, their lifelines and their labels.
