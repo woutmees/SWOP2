@@ -26,6 +26,7 @@ public class Canvas {
 	private View view = View.SEQUENCE;
 	private int origineX;
 	private int origineY;
+	private titleBar titleBar;
 	
 	/**
 	 * 
@@ -40,6 +41,7 @@ public class Canvas {
 		this.messages = new HashSet<Message>();
 		this.width = width;
 		this.height = height;
+		this.titleBar = new titleBar();
 	}
 	
 	public Mode getMode() {
@@ -394,4 +396,12 @@ public class Canvas {
 		this.origineY = origineY;
 	}
 
+	public titleBar getTitleBar() {
+		return titleBar;
+	}
+
+	public void setTitleBar(titleBar titleBar) {
+		this.titleBar = titleBar;
+	}
+	
 }
