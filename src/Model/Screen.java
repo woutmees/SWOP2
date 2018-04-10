@@ -33,19 +33,35 @@ public class Screen {
 		// Determine Canvas 
 		Canvas canvas = null;
 		
-		// TODO Iterator
-		while(!subWindows.isEmpty()) {
-			if(isInArea(x,y,subWindows.lastElement())) {canvas = subWindows.lastElement();}
+		
+		Stack<Canvas> findList = new Stack<Canvas>();
+		findList.addAll(subWindows);
+		boolean found = false;
+		while(!findList.isEmpty() && !found) {
+			canvas = findList.pop();
+			if( isInArea(x, y, canvas)) {
+				found = true;
+			}
 		}
+		// Selected SubWindow must be placed on top of the stack of subWindows
+		subWindows.remove(canvas);
+		subWindows.push(canvas);
+		
 		
 		// Delegate to Interaction
 		canvas.getInteraction().mouseClicked(id, x, y, canvas);
 		
 	}
 	
-	
 	private boolean isInArea(int x, int y, Canvas lastElement) {
-		if(false) {return true;} //TODO Check
+		int xLow = lastElement.getOrigineX();
+		int yLow = lastElement.getOrigineY();
+		int xHigh = xLow + lastElement.getWidth();
+		int yHigh = yLow + lastElement.getHeight();
+		
+		if( x >= xLow && x <= xHigh && y >= yLow && y <= yHigh) {
+			return true;
+		}
 		return false;
 	}
 
