@@ -33,6 +33,16 @@ public class SequenceDiagram extends View {
 	@Override
 	public void draw(Canvas c, Graphics g) {
 		
+		
+		/* Iteration 2 ------------------------------
+		
+		There can only be drawn in this clip!
+		
+		*/ 
+		g.setClip(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
+		
+		// ------------------------------------------
+		
 		//Draw the "Parties" box.
 		g.drawRect(10, 10, c.getWidth()-20, c.getHeight()/6);
 		g.drawString("Parties", 20, 20);

@@ -24,6 +24,8 @@ public class Canvas {
 	private ArrayList<ResultMessage> resultQueue = new ArrayList<ResultMessage>();
 	private Mode mode = Mode.DEFAULT;
 	private View view = View.SEQUENCE;
+	private int origineX;
+	private int origineY;
 	
 	/**
 	 * 
@@ -376,5 +378,20 @@ public class Canvas {
 		}
 		return min;
 	}
-	
+	public int getOrigineX() {
+		return origineX;
+	}
+
+	public void setOrigineX(int origineX) {
+		this.origineX = origineX;
+	}
+
+	public int getOrigineY() {
+		return origineY;
+	}
+
+	public void setOrigineY(int origineY) {
+		this.origineY = origineY;
+	}
+
 }

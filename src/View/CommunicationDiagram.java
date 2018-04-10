@@ -47,6 +47,15 @@ public class CommunicationDiagram extends View {
 	 */
 	@Override
 	public void draw(Canvas c, Graphics g) {
+		
+		/* Iteration 2 ------------------------------
+		
+		There can only be drawn in this clip!
+		
+		*/ 
+		g.setClip(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
+		
+		// ------------------------------------------
 		this.parties = c.getParties();
 		this.messages = c.getMessages();
 		this.graph = g;
