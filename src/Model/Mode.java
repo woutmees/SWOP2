@@ -5,5 +5,6 @@ public enum Mode {
 	EDITMESSAGE, 
 	MOVEPARTY, 
 	ADDMESSAGE, 
-	DEFAULT
+	DEFAULT,
+	CLOSING
 }

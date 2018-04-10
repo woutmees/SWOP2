@@ -49,6 +49,11 @@ public class SelectElementHandler extends Handler {
 			Label l = getLabelAt(x, y, canvas);
 			Party p = getPartyAt(x, y, canvas);
 			
+			// Closing Canvas 
+			if (closeCanvas(canvas,x,y)) {
+				canvas.setMode(Mode.CLOSING);
+			}
+			
 			if(p == null && l == null) {deselectAll(canvas);}
 			
 			if(l!=null) {l.setSelected(true);}
@@ -272,5 +277,15 @@ public class SelectElementHandler extends Handler {
 		return (p.getPosSeq().xCoordinate-30)<x &&
 				(p.getPosSeq().xCoordinate+30)>x;
 	}
-	
+	public static boolean closeCanvas(Canvas canvas, int xMouse, int yMouse) {
+		Button button = canvas.getFramework().getBar().getButton();
+		int buttonOrigineX = button.getOrigineX();
+		int buttonOrigineY = button.getOrigineY();
+		int upperX = buttonOrigineX + button.getWidth();
+		int upperY = buttonOrigineY + button.getHeight();
+		if( xMouse >= buttonOrigineX && xMouse <= upperX && yMouse >= buttonOrigineY && yMouse <= upperY ) {
+			return true;
+		}
+		return false;
+	}
 }

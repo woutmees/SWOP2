@@ -83,7 +83,11 @@ public class MyCanvasWindow extends CanvasWindow{
 	 */
 	@Override
 	protected void handleMouseEvent(int id, int x, int y, int clickCount){
+		// 
+		this.canvas = screen.getSubWindows().lastElement();
+		
 		System.out.println("######## "+canvas.getMode()+" ########");
+		
 		if(!EditLabelHandler.editLabelModeParty(canvas)) {
 			
 			switch(id) {

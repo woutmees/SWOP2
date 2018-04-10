@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import Model.Actor;
 import Model.Canvas;
 import Model.Label;
 import Model.Message;
 import Model.Party;
 import Model.ResultMessage;
+import Model.titleBar;
 
 /**
  * 
@@ -42,15 +42,17 @@ public class SequenceDiagram extends View {
 		*/ 
 		g.setClip(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
 		
-		// draw TitleBar(title + close Button)
-		
-		titleBar bar = new titleBar();
-		bar.draw(c, g);
-		
+		// fill white rectangle to draw on
+		g.setColor(Color.WHITE);
+		g.fillRect(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
+		g.setColor(Color.BLACK);
+
+		// draw frameWork
+		c.getFramework().draw(c, g);
 		// ------------------------------------------
 		
 		//Draw the "Parties" box.
-		g.drawRect(c.getOrigineX()+10,  c.getOrigineY()+ 30, c.getOrigineY()+ c.getWidth()-20,  c.getOrigineY()+c.getHeight()/6);
+		g.drawRect(c.getOrigineX()+10,  c.getOrigineY()+ 30, c.getWidth()-20, c.getHeight()/6);
 		g.drawString("Parties", c.getOrigineX()+ 20, c.getOrigineY()+ 40);
 		
 		

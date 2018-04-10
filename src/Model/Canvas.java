@@ -24,8 +24,8 @@ public class Canvas {
 	private View view = View.SEQUENCE;
 	private int origineX;
 	private int origineY;
-	private titleBar titleBar;
-	private Interaction interaction = null; //TODO Constructor
+	private frameWork framework;
+	private Interaction interaction = null; 
 	
 	/**
 	 * 
@@ -35,14 +35,17 @@ public class Canvas {
 	 * @param height
 	 */
 	
-	public Canvas(int width, int height) {
+	public Canvas(int width, int height, int origineX, int origineY, Interaction i) {
 		this.parties = new HashSet<Party>();
 		this.messages = new HashSet<Message>();
 		this.width = width;
 		this.height = height;
-		this.titleBar = new titleBar();
+		this.framework = new frameWork(origineX,origineY);
+		this.interaction = i;
+		this.origineX= origineX;
+		this.origineY= origineY;
 	}
-	
+
 	public Mode getMode() {
 		return mode;
 	}
@@ -395,16 +398,21 @@ public class Canvas {
 		this.origineY = origineY;
 	}
 
-	public titleBar getTitleBar() {
-		return titleBar;
-	}
-
-	public void setTitleBar(titleBar titleBar) {
-		this.titleBar = titleBar;
-	}
-
 	public Interaction getInteraction() {
 		return interaction;
 	}
-	
+	public void setInteractioin(Interaction i) {
+		this.interaction = i;
+	}
+
+	public frameWork getFramework() {
+		return framework;
+	}
+
+	public void setFramework(frameWork framework) {
+		this.framework = framework;
+	}
+	public void setMode(Mode m) {
+		this.mode = m;
+	}
 }

@@ -2,6 +2,7 @@ package Model;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 import Controller.Mouse;
 
@@ -9,11 +10,16 @@ public class Interaction {
 	
 	public Interaction() {
 		subWindows = new ArrayList<Canvas>();
-		subWindows.add(new Canvas(300, 300));
+		
+		int xOrigineRandom = randNumberPos.nextInt(250);
+		int yOrigineRandom = randNumberPos.nextInt(250);
+		Canvas c = new Canvas(300, 300, xOrigineRandom,yOrigineRandom,this );
+		subWindows.add(c);
 	}
 
 	private ArrayList<Canvas> subWindows = new ArrayList<Canvas>();
-	
+	private Random randNumberPos = new Random();
+
 	ArrayList<Canvas> getSubWindows(){
 		return subWindows;
 	}
@@ -43,7 +49,18 @@ public class Interaction {
 					if(Handler.getPartyAt(x, y, canvas)!=null){SetPartyTypeHandler.handle(canvas, x, y);break;}
 					else{AddPartyHandler.handle(canvas, x, y);break;}
 				}
+		}
+		
+		// Find any canvas objects that need to be closed/deleted!
+		ArrayList<Canvas> toBeDeleted = new ArrayList<Canvas>();
+		for( Canvas c :subWindows) {
+			if(c.getMode()  == Mode.CLOSING) {
+				toBeDeleted.add(c);
 			}
+		}
+		for (Canvas c : toBeDeleted) {
+			subWindows.remove(c);
+		}
 	}
 
 	public void keyPressed(int id, int keyCode, char keyChar, Canvas canvas) {
@@ -65,10 +82,8 @@ public class Interaction {
 				break;
 			}
 		} else if (id == KeyEvent.KEY_TYPED) {
-			boolean found = false;
 			for(Party p : canvas.getParties()){
 				if(p.getLabel().getSelected()) {
-					found = true;
 					if(canvas.isSequenceDiagram())
 						EditLabelHandler.handle(canvas, p.getLabel(), p, keyChar, p.getLabel().getLabelPositionSequence().getX(), p.getLabel().getLabelPositionSequence().getY());
 					else 
@@ -86,6 +101,13 @@ public class Interaction {
 				}
 			}
 		}
+	}
+	public void deleteCanvas(Canvas c) {
+		subWindows.remove(c);
+	}
+	public void addCanvas(Canvas c) {
+		c.setInteractioin(this);
+		subWindows.add(c);
 	}
 	
 }

@@ -10,6 +10,7 @@ import java.util.Random;
 import Model.Canvas;
 import Model.Message;
 import Model.Party;
+import Model.titleBar;
 
 /**
  * 
@@ -55,12 +56,15 @@ public class CommunicationDiagram extends View {
 		*/ 
 		g.setClip(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
 		
-		// draw TitleBar(title + close Button)
-		
-		titleBar bar = new titleBar();
-		bar.draw(c, g);
-		
+		// fill white rectangle to draw on
+		g.setColor(Color.WHITE);
+		g.fillRect(c.getOrigineX(), c.getOrigineY(), c.getWidth(), c.getHeight());
+		g.setColor(Color.BLACK);
+
+		// draw frameWork
+		c.getFramework().draw(c, g);
 		// ------------------------------------------
+		
 		this.parties = c.getParties();
 		this.messages = c.getMessages();
 		this.graph = g;

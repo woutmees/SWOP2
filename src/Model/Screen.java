@@ -2,6 +2,7 @@ package Model;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 import Controller.Mouse;
@@ -14,6 +15,11 @@ public class Screen {
 	
 	private ArrayList<Interaction> interactions = new ArrayList<Interaction>();
 	
+	private boolean ctrlPressed =  false;
+	
+	private Random randNumberPos = new Random();
+
+
 	public ArrayList<Interaction> getInteractions() {
 		return this.interactions;
 	}
@@ -29,28 +35,50 @@ public class Screen {
 	
 	
 	public void mouseClicked(Mouse id, int x, int y) {
+		// First check if a party label is left in a valid state + check if there are any interactions
+		if (!interactions.isEmpty() && !EditLabelHandler.editLabelModeParty(subWindows.lastElement())) {
+			// Determine Canvas 
+			Canvas canvas = null;
+			
+			
+			Stack<Canvas> findList = new Stack<Canvas>();
+			findList.addAll(subWindows);
+			boolean found = false;
+			while(!findList.isEmpty() && !found) {
+				canvas = findList.pop();
+				if( isInArea(x, y, canvas)) {
+					found = true;
+				}
+			}
+			// Selected SubWindow must be placed on top of the stack of subWindows
+			subWindows.remove(canvas);
+			subWindows.push(canvas);
+			
+			
+			// Delegate to Interaction
+			canvas.getInteraction().mouseClicked(id, x, y, canvas);
+		}
 		
-		// Determine Canvas 
-		Canvas canvas = null;
-		
-		
-		Stack<Canvas> findList = new Stack<Canvas>();
-		findList.addAll(subWindows);
-		boolean found = false;
-		while(!findList.isEmpty() && !found) {
-			canvas = findList.pop();
-			if( isInArea(x, y, canvas)) {
-				found = true;
+		// Find any canvas objects that need to be closed/deleted!
+		ArrayList<Canvas> toBeDeleted = new ArrayList<Canvas>();
+		for( Canvas c :subWindows) {
+			if(c.getMode()  == Mode.CLOSING) {
+				toBeDeleted.add(c);
 			}
 		}
-		// Selected SubWindow must be placed on top of the stack of subWindows
-		subWindows.remove(canvas);
-		subWindows.push(canvas);
-		
-		
-		// Delegate to Interaction
-		canvas.getInteraction().mouseClicked(id, x, y, canvas);
-		
+		for (Canvas c : toBeDeleted) {
+			subWindows.remove(c);
+		}
+		// Find any Empty Interaction(empty interaction =  canvas left) ==> delete empty Interaction
+		ArrayList<Interaction> toBeDeletedInteraction = new ArrayList<Interaction>();
+		for( Interaction i :interactions) {
+			if(i.getSubWindows().isEmpty()) {
+				toBeDeletedInteraction.add(i);
+			}
+		}
+		for (Interaction i : toBeDeletedInteraction) {
+			interactions.remove(i);
+		}
 	}
 	
 	private boolean isInArea(int x, int y, Canvas lastElement) {
@@ -64,13 +92,32 @@ public class Screen {
 		}
 		return false;
 	}
-
+	
 	public void keyPressed(int id, int keyCode, char keyChar) {
-		if(id==KeyEvent.CTRL_DOWN_MASK+KeyEvent.VK_D) {	//TODO CTRL+D ???
-			addInteraction(new Interaction());
-		} 
-		
-		if(id == KeyEvent.KEY_PRESSED && !EditLabelHandler.editLabelModeParty(subWindows.lastElement())) {
+
+		if( ctrlPressed && keyCode == 68 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED)) {
+			// New interaction
+			System.out.println("############ New Interaction Made ######################");
+			Interaction i = new Interaction();
+			addInteraction(i);
+			for( Canvas c : i.getSubWindows()) {
+				subWindows.push(c);
+			}
+		}else if ( ctrlPressed && keyCode == 78 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) ) {
+			// Add new Subwindow to current Interaction
+			Interaction i = subWindows.lastElement().getInteraction();
+			int xOrigineRandom = randNumberPos.nextInt(250);
+			int yOrigineRandom = randNumberPos.nextInt(250);
+			Canvas c = new Canvas(300,300,xOrigineRandom,yOrigineRandom,i);
+			i.addCanvas(c);
+			subWindows.push(c);
+			System.out.println("############ New SubWindow Added #######################");
+		} else {
+			ctrlPressed = false;
+		}		
+		if( id == KeyEvent.KEY_PRESSED && keyCode == 17) {
+			ctrlPressed = true;
+		} else if(id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) {
 			subWindows.lastElement().getInteraction().keyPressed(id, keyCode, keyChar, subWindows.lastElement());
 		}
 	}
