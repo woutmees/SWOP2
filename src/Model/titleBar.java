@@ -8,6 +8,7 @@ public class titleBar {
 	private Button button;
 	private int OrigineX;
 	private int OrigineY;
+	static int height = 20;
 	
 	public titleBar(int xInput, int yInput) {
 		this.OrigineX = xInput;
@@ -43,9 +44,11 @@ public class titleBar {
 		this.OrigineY = c.getOrigineY();
 		
 		// Title Bar
-		g.drawRect(OrigineX, OrigineY, c.getWidth(), 20);
+		g.drawRect(OrigineX, OrigineY, c.getWidth(), height);
 		g.drawString(title, OrigineX + 20 , OrigineY + 14);
 		
+		button.setOrigineX(OrigineX);
+		button.setOrigineY(OrigineY);
 		button.draw(g);
 
 	}
@@ -65,5 +68,10 @@ public class titleBar {
 	public void setOrigineY(int origineY) {
 		OrigineY = origineY;
 	}
-	
+	public static int getWidth(Canvas c) {
+		return c.getWidth();
+	}
+	public static int getHeight() {
+		return height;
+	}
 }

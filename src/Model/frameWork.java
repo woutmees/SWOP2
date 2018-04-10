@@ -16,6 +16,8 @@ public class frameWork {
 	public void draw(Canvas c, Graphics g) {
 		
 		// draw framework
+		this.origineX = c.getOrigineX();
+		this.origineY = c.getOrigineY();
 		
 	    g.drawRect(origineX, origineY, c.getWidth()-1, c.getHeight()-1);
 

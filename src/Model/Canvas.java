@@ -415,4 +415,23 @@ public class Canvas {
 	public void setMode(Mode m) {
 		this.mode = m;
 	}
+	public void resizeXCanvas(int xMouse) {
+		if(xMouse > titleBar.getWidth(this) ) {
+			this.width = xMouse - this.getOrigineX();
+		}
+	}
+	public void resizeYCanvas(int yMouse) {
+		if(yMouse > titleBar.getHeight() ) {
+			this.height = yMouse - this.getOrigineY();
+		}
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
 }

@@ -44,6 +44,7 @@ public class Screen {
 			Stack<Canvas> findList = new Stack<Canvas>();
 			findList.addAll(subWindows);
 			boolean found = false;
+			Canvas top = findList.lastElement();
 			while(!findList.isEmpty() && !found) {
 				canvas = findList.pop();
 				if( isInArea(x, y, canvas)) {
@@ -54,9 +55,11 @@ public class Screen {
 			subWindows.remove(canvas);
 			subWindows.push(canvas);
 			
-			
-			// Delegate to Interaction
-			canvas.getInteraction().mouseClicked(id, x, y, canvas);
+			// Check if the selected canvas was on top of the stack(active canvas)
+			if( top == canvas) {
+				// Delegate to Interaction
+				canvas.getInteraction().mouseClicked(id, x, y, canvas);
+			}
 		}
 		
 		// Find any canvas objects that need to be closed/deleted!
@@ -103,7 +106,7 @@ public class Screen {
 			for( Canvas c : i.getSubWindows()) {
 				subWindows.push(c);
 			}
-		}else if ( ctrlPressed && keyCode == 78 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) ) {
+		}else if ( !interactions.isEmpty() && ctrlPressed && keyCode == 78 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) ) {
 			// Add new Subwindow to current Interaction
 			Interaction i = subWindows.lastElement().getInteraction();
 			int xOrigineRandom = randNumberPos.nextInt(250);
@@ -117,7 +120,7 @@ public class Screen {
 		}		
 		if( id == KeyEvent.KEY_PRESSED && keyCode == 17) {
 			ctrlPressed = true;
-		} else if(id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) {
+		} else if(!interactions.isEmpty() && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED)) {
 			subWindows.lastElement().getInteraction().keyPressed(id, keyCode, keyChar, subWindows.lastElement());
 		}
 	}

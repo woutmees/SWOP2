@@ -61,10 +61,22 @@ public class SelectElementHandler extends Handler {
 		}
 		
 		else if(id == Mouse.PRESSED) {
+			
 			if(existsSender(canvas)) {return;}
 			Party p = getPartyAt(x, y, canvas); if(p==null) {System.out.println("NUll_1");}
 			Party lifeLine = approxLifeLine(x, canvas); if(lifeLine==null) {System.out.println("NULL_2");}
-			if(p  != null) {
+			
+			if( moveCanvas(canvas, x,y)) {
+				canvas.setOrigineX(x-(titleBar.getWidth(canvas)/2));
+				canvas.setOrigineY(y-(titleBar.getHeight()/2));
+			}
+			else if( resizeXCanvas(canvas,x) ) {
+				canvas.resizeXCanvas(x);
+			}
+			else if( resizeYCanvas(canvas,y)) {
+				canvas.resizeYCanvas(y);
+			}
+			else if(p  != null) {
 				canvas.setMovePartyMode();
 				p.setSelected(true);
 				System.out.println("MovePartyMode");
@@ -288,4 +300,37 @@ public class SelectElementHandler extends Handler {
 		}
 		return false;
 	}
+	public static boolean moveCanvas(Canvas canvas,int xMouse, int yMouse) {
+		// If cursor is in button Area => wait for id==Mouse.SINGLECLICK in handle Method
+		if(closeCanvas(canvas, xMouse,yMouse)) {
+			return false;
+		}
+		
+		titleBar bar = canvas.getFramework().getBar();
+		int barOrigineX = bar.getOrigineX();
+		int barOrigineY = bar.getOrigineY();
+		int upperX = barOrigineX + titleBar.getWidth(canvas);
+		int upperY = barOrigineY + titleBar.getHeight();
+		if( xMouse >= barOrigineX && xMouse <= upperX && yMouse >= barOrigineY && yMouse <= upperY ) {
+			return true;
+		}
+		return false;
+	}
+	public static boolean resizeXCanvas(Canvas canvas, int xMouse ) {
+		int xLow = canvas.getOrigineX() + canvas.getWidth() - 4;
+		int xHigh = xLow + 8;
+		if ( xMouse >= xLow && xMouse <= xHigh) {
+			return true;
+		}
+		return false;
+	}
+	public static boolean resizeYCanvas(Canvas canvas, int yMouse) {
+		int yLow = canvas.getOrigineY() + canvas.getHeight() -4;
+		int yHigh = yLow + 8;
+		if(yMouse  >= yLow && yMouse <= yHigh) {
+			return true;
+		}
+		return false;
+	}
+	
 }
