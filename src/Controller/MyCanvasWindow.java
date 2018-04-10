@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import Controller.Mouse;
 import Model.AddMessageHandler;
@@ -53,19 +54,24 @@ public class MyCanvasWindow extends CanvasWindow{
 	 */
 	@Override
 	protected void paint(Graphics g){
+		g.setColor(Color.GRAY);
+		g.fillRect(0, 0, 600, 600);
 		
 		Color textColor = Color.BLACK;
 		Font font = new Font("Font", 1, 12);
 		
 		g.setColor(textColor);
 		g.setFont(font);
-		Canvas c = getCanvas();
-		View v;
-		if (c.isSequenceDiagram())
-			v = new SequenceDiagram();
-		else
-			v = new CommunicationDiagram();
-		v.draw(c, g);
+				
+		for(Canvas c : screen.getSubWindows()) {
+			View v;
+			if (c.isSequenceDiagram())
+				v = new SequenceDiagram();
+			else
+				v = new CommunicationDiagram();
+			v.draw(c, g);
+		}
+
 	}
 	
 	/**
@@ -109,7 +115,7 @@ public class MyCanvasWindow extends CanvasWindow{
 		repaint();
 	}
 	
-	private Canvas canvas = new Canvas(width, height);
+	private Canvas canvas;
 	private Screen screen = new Screen();
 	
 	/**

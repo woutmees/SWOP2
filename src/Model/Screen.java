@@ -58,5 +58,17 @@ public class Screen {
 			subWindows.lastElement().getInteraction().keyPressed(id, keyCode, keyChar, subWindows.lastElement());
 		}
 	}
+
+	public Stack<Canvas> getSubWindows() {
+		return subWindows;
+	}
+
+	public void setSubWindows(Stack<Canvas> subWindows) {
+		this.subWindows = subWindows;
+	}
+
+	public void setInteractions(ArrayList<Interaction> interactions) {
+		this.interactions = interactions;
+	}
 	
 }
