@@ -416,12 +416,12 @@ public class Canvas {
 		this.mode = m;
 	}
 	public void resizeXCanvas(int xMouse) {
-		if(xMouse > titleBar.getWidth(this) ) {
+		if(this.width > this.getFramework().getBar().getWidth(this) ) {
 			this.width = xMouse - this.getOrigineX();
 		}
 	}
 	public void resizeYCanvas(int yMouse) {
-		if(yMouse > titleBar.getHeight() ) {
+		if(this.height > this.getFramework().getBar().getHeight() ) {
 			this.height = yMouse - this.getOrigineY();
 		}
 	}
@@ -435,10 +435,10 @@ public class Canvas {
 	}
 
 	public void resizeCornerCanvas(int xMouse, int yMouse) {
-		if(yMouse > titleBar.getHeight() ) {
+		if(this.height > this.getFramework().getBar().getHeight() ) {
 			this.height = yMouse - this.getOrigineY();
 		}
-		if(xMouse > titleBar.getWidth(this) ) {
+		if(this.width > this.getFramework().getBar().getWidth(this) ) {
 			this.width = xMouse - this.getOrigineX();
 		}
 	}

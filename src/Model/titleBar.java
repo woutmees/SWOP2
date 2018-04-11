@@ -5,11 +5,12 @@ import java.awt.Graphics;
 
 public class titleBar {
 	
-	private String title;
+	private String title = "No title";
 	private Button button;
 	private int OrigineX;
 	private int OrigineY;
 	static int height = 20;
+	private int width = 8*title.length();
 	
 	public titleBar(int xInput, int yInput) {
 		this.OrigineX = xInput;
@@ -72,10 +73,15 @@ public class titleBar {
 	public void setOrigineY(int origineY) {
 		OrigineY = origineY;
 	}
-	public static int getWidth(Canvas c) {
-		return c.getWidth();
+	public int getWidth(Canvas c) {
+		if ( c.isSequenceDiagram()) {
+			title = "Sequence Diagram";
+		} else  {
+			title = "Communication Diagram";
+		}
+		return 8*title.length();
 	}
-	public static int getHeight() {
+	public int getHeight() {
 		return height;
 	}
 }

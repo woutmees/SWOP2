@@ -67,8 +67,8 @@ public class SelectElementHandler extends Handler {
 			Party lifeLine = approxLifeLine(x, canvas); if(lifeLine==null) {System.out.println("NULL_2");}
 			
 			if( moveCanvas(canvas, x,y)) {
-				canvas.setOrigineX(x-(titleBar.getWidth(canvas)/2));
-				canvas.setOrigineY(y-(titleBar.getHeight()/2));
+				canvas.setOrigineX(x-(canvas.getFramework().getBar().getWidth(canvas)/2));
+				canvas.setOrigineY(y-(canvas.getFramework().getBar().getHeight()/2));
 			}
 			else if( resizeCornerCanvas(canvas, x, y)) {
 				canvas.resizeCornerCanvas(x,y);
@@ -309,8 +309,8 @@ public class SelectElementHandler extends Handler {
 		titleBar bar = canvas.getFramework().getBar();
 		int barOrigineX = bar.getOrigineX();
 		int barOrigineY = bar.getOrigineY();
-		int upperX = barOrigineX + titleBar.getWidth(canvas);
-		int upperY = barOrigineY + titleBar.getHeight();
+		int upperX = barOrigineX + canvas.getFramework().getBar().getWidth(canvas);
+		int upperY = barOrigineY + canvas.getFramework().getBar().getHeight();
 		if( xMouse >= barOrigineX && xMouse <= upperX && yMouse >= barOrigineY && yMouse <= upperY ) {
 			return true;
 		}
