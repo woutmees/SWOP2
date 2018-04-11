@@ -87,8 +87,9 @@ public class Screen {
 	private boolean isInArea(int x, int y, Canvas lastElement) {
 		int xLow = lastElement.getOrigineX();
 		int yLow = lastElement.getOrigineY();
-		int xHigh = xLow + lastElement.getWidth();
-		int yHigh = yLow + lastElement.getHeight();
+		// "+4" is for resize -> canvas.resize methods
+		int xHigh = xLow + lastElement.getWidth() +4 ;
+		int yHigh = yLow + lastElement.getHeight() + 4;
 		
 		if( x >= xLow && x <= xHigh && y >= yLow && y <= yHigh) {
 			return true;
