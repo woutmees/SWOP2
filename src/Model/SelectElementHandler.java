@@ -66,9 +66,27 @@ public class SelectElementHandler extends Handler {
 			Party p = getPartyAt(x, y, canvas); if(p==null) {System.out.println("NUll_1");}
 			Party lifeLine = approxLifeLine(x, canvas); if(lifeLine==null) {System.out.println("NULL_2");}
 			
+			int previousOriginX = canvas.getOrigineX();
+			int previousOriginY = canvas.getOrigineY();
+			
 			if( moveCanvas(canvas, x,y)) {
 				canvas.setOrigineX(x-(canvas.getFramework().getBar().getWidth(canvas)/2));
 				canvas.setOrigineY(y-(canvas.getFramework().getBar().getHeight()/2));
+				for(Party party : canvas.getParties()) {
+					
+					int newOriginX = canvas.getOrigineX();
+					int newOriginY = canvas.getOrigineY();
+					
+					int differenceX = newOriginX - previousOriginX;
+					int differenceY = newOriginY - previousOriginY;
+					
+					party.setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY, canvas);
+					party.setPosSeq(party.getPosSeq(canvas).xCoordinate+differenceX, party.getPosSeq(canvas).yCoordinate+differenceY, canvas);
+					party.getLabel().setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY+party.getLabel().getHeight(), canvas);
+					//TODO +2*label.height
+					party.getLabel().setPosSeq(party.getPosSeq(canvas).xCoordinate+differenceX, party.getPosSeq(canvas).yCoordinate+differenceY+2*party.getLabel().getHeight(), canvas);
+				}
+				
 			}
 			else if( resizeCornerCanvas(canvas, x, y)) {
 				canvas.resizeCornerCanvas(x,y);

@@ -19,7 +19,7 @@ public class AddPartyHandler {
 		Object party = new Object(defaultName);
 		
 		int seqYCoordinate = canvas.getOrigineY() +canvas.getHeight()/12;
-		int seqYLabel = seqYCoordinate +party.getHeight() + 10;
+		int seqYLabel = seqYCoordinate + party.getHeight() + 10;
 		
 		party.setPosSeq(x, seqYCoordinate, canvas);
 		party.setPosComm(x, y, canvas);

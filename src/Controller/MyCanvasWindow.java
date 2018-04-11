@@ -44,6 +44,7 @@ public class MyCanvasWindow extends CanvasWindow{
 	 * The constructor for MyCanvasWindow.
 	 * @param title 		The title for this window.
 	 */
+	
 	public MyCanvasWindow(String title) {
 		super(title);
 	}
@@ -52,10 +53,11 @@ public class MyCanvasWindow extends CanvasWindow{
 	 * Paints the current window using the canvas data.
 	 * @param g 		The Graphics object used for painting the window.
 	 */
+	
 	@Override
 	protected void paint(Graphics g){
 		g.setColor(Color.GRAY);
-		g.fillRect(0, 0, 600, 600);
+		g.fillRect(0, 0, 6000, 6000);
 		
 		Color textColor = Color.BLACK;
 		Font font = new Font("Font", 1, 12);
