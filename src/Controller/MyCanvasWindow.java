@@ -98,12 +98,12 @@ public class MyCanvasWindow extends CanvasWindow{
 				case MouseEvent.MOUSE_CLICKED:
 					if(clickCount == 1) {screen.mouseClicked(Mouse.SINGLECLICK, x, y);}
 					if(clickCount == 2) {screen.mouseClicked(Mouse.DOUBLECLICK, x, y);}
-				case MouseEvent.MOUSE_PRESSED:
-					screen.mouseClicked(Mouse.PRESSED, x, y);
-				case MouseEvent.MOUSE_DRAGGED:
-					screen.mouseClicked(Mouse.DRAGGED, x, y);
 				case MouseEvent.MOUSE_RELEASED:
 					screen.mouseClicked(Mouse.RELEASED, x, y);
+				case MouseEvent.MOUSE_DRAGGED:
+					screen.mouseClicked(Mouse.DRAGGED, x, y);
+				case MouseEvent.MOUSE_PRESSED:
+					screen.mouseClicked(Mouse.PRESSED, x, y);
 				}
 			}
 		}
