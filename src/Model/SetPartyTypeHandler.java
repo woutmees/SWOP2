@@ -24,8 +24,8 @@ public class SetPartyTypeHandler extends Handler {
 		}
 		
 		partyToAdd.setLabel(changingParty.getLabel());
-		partyToAdd.setPosComm(changingParty.getPosComm().getX(), changingParty.getPosComm().getY());
-		partyToAdd.setPosSeq(changingParty.getPosSeq().getX(), changingParty.getPosSeq().getY());
+		partyToAdd.setPosComm(changingParty.getPosComm(canvas).getX(), changingParty.getPosComm(canvas).getY(), canvas);
+		partyToAdd.setPosSeq(changingParty.getPosSeq(canvas).getX(), changingParty.getPosSeq(canvas).getY(), canvas);
 		partyToAdd.setSelected(false);
 		
 		for(Message m : canvas.getMessages()) {

@@ -113,7 +113,7 @@ public class SelectElementHandler extends Handler {
 
 	private static Party approxLifeLine(int x, Canvas canvas) {
 		for(Party p : canvas.getParties()) {
-			if(approxLifeLine(p, x)) {return p;}
+			if(approxLifeLine(p, x, canvas)) {return p;}
 		}
 		return null;
 	}
@@ -152,8 +152,8 @@ public class SelectElementHandler extends Handler {
 					isInAreaCommunication(
 							x,
 							y,
-							p.getPosComm().getX()+3,
-							((p.getPosComm().getY()-p.getLabel().getHeight())+3),
+							p.getPosComm(canvas).getX()+3,
+							((p.getPosComm(canvas).getY()-p.getLabel().getHeight())+3),
 							(p.getLabel().getWidth()-6),
 							(p.getLabel().getHeight()-6)
 							)
@@ -168,8 +168,8 @@ public class SelectElementHandler extends Handler {
 					isInAreaCommunication(
 							x,
 							y,
-							m.getLabel().getLabelPositionComm().xCoordinate,
-							(m.getLabel().getLabelPositionComm().yCoordinate-m.getLabel().getHeight()),
+							m.getLabel().getPosComm(canvas).xCoordinate,
+							(m.getLabel().getPosComm(canvas).yCoordinate-m.getLabel().getHeight()),
 							m.getLabel().getWidth(),
 							m.getLabel().getHeight()
 							)
@@ -189,8 +189,8 @@ public class SelectElementHandler extends Handler {
 					isInArea(
 							x,
 							y,
-							p.getLabel().getLabelPositionSequence().xCoordinate,
-							p.getLabel().getLabelPositionSequence().yCoordinate,
+							p.getLabel().getPosSeq(canvas).xCoordinate,
+							p.getLabel().getPosSeq(canvas).yCoordinate,
 							p.getLabel().getWidth()-3,
 							p.getLabel().getHeight()-6
 							)
@@ -205,8 +205,8 @@ public class SelectElementHandler extends Handler {
 					isInArea(
 							x,
 							y,
-							m.getLabel().getLabelPositionSequence().xCoordinate,
-							m.getLabel().getLabelPositionSequence().yCoordinate,
+							m.getLabel().getPosSeq(canvas).xCoordinate,
+							m.getLabel().getPosSeq(canvas).yCoordinate,
 							m.getLabel().getWidth(),
 							m.getLabel().getHeight()
 							)
@@ -230,7 +230,7 @@ public class SelectElementHandler extends Handler {
 		boolean sender = existsSender(canvas);
 		
 		for(Party p : canvas.getParties()) {
-			if(approxLifeLine(p,x)) {
+			if(approxLifeLine(p,x, canvas)) {
 				p.setSelectedYPosition(y);
 				if(sender){p.makeReceiver();return;}
 				else{p.makeSender();return;}
@@ -248,7 +248,7 @@ public class SelectElementHandler extends Handler {
 		boolean sender = existsSender(canvas);
 		
 		for(Party p : canvas.getParties()) {
-			if(approxParty(p,x,y)) {
+			if(approxParty(p,x,y, canvas)) {
 				if(sender) {p.makeReceiver();return;}
 				else {p.makeSender();return;}
 			}
@@ -268,7 +268,7 @@ public class SelectElementHandler extends Handler {
 		return false;
 	}
 	
-	private static boolean approxParty(Party p, int x, int y) {
+	private static boolean approxParty(Party p, int x, int y, Canvas canvas) {
 		int height;
 		if(p.getClass() == Model.Object.class) {
 			height = (p.getLabel().getHeight()+12);
@@ -278,16 +278,16 @@ public class SelectElementHandler extends Handler {
 		return isInAreaCommunication(
 				x,
 				y,
-				(p.getPosComm().getX()-6),
-				(p.getPosComm().getY()-(p.getLabel().getHeight()+6)),
+				(p.getPosComm(canvas).getX()-6),
+				(p.getPosComm(canvas).getY()-(p.getLabel().getHeight()+6)),
 				(p.getLabel().getWidth()+12),
 				height
 				);
 	}
 	
-	private static boolean approxLifeLine(Party p, int x) {
-		return (p.getPosSeq().xCoordinate-30)<x &&
-				(p.getPosSeq().xCoordinate+30)>x;
+	private static boolean approxLifeLine(Party p, int x, Canvas canvas) {
+		return (p.getPosSeq(canvas).xCoordinate-30)<x &&
+				(p.getPosSeq(canvas).xCoordinate+30)>x;
 	}
 	public static boolean closeCanvas(Canvas canvas, int xMouse, int yMouse) {
 		Button button = canvas.getFramework().getBar().getButton();

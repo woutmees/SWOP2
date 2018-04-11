@@ -258,24 +258,24 @@ public class Canvas {
 	 * Update the position of the labels after for example deletion of a message
 	 * 
 	 */
-	public void updateLabels(){
+	public void updateLabels(Canvas canvas){
 		for(Message m : getMessages()) {
 			if(m.getClass()==InvocationMessage.class) {
-				int invocLabelX = Math.max(m.getReicevedBy().getPosSeq().getX(), m.getSentBy().getPosSeq().getX()) - Math.abs( (m.getReicevedBy().getPosSeq().getX() - m.getSentBy().getPosSeq().getX() )/2);
+				int invocLabelX = Math.max(m.getReicevedBy().getPosSeq(canvas).getX(), m.getSentBy().getPosSeq(canvas).getX()) - Math.abs( (m.getReicevedBy().getPosSeq(canvas).getX() - m.getSentBy().getPosSeq(canvas).getX() )/2);
 				int invocLabelY = this.getHeight()/6 + 30 + (50 * AddMessageHandler.getAmountPredecessors(this, m));
-				m.getLabel().setLabelPositionSeq(invocLabelX, invocLabelY);
+				m.getLabel().setPosSeq(invocLabelX, invocLabelY, canvas);
 			}
 		}
 	}
 	
 	
-	public void updatePosComm() {
-		messagesUpdate();
+	public void updatePosComm(Canvas canvas) {
+		messagesUpdate(canvas);
 	}
-	private void messagesUpdate(){
+	private void messagesUpdate(Canvas canvas){
 		LinkedList<LinkedList<Message>> listStacks = makeStackMessages();
 		for( LinkedList<Message> list : listStacks){
-			updatePosStackMessages(list);
+			updatePosStackMessages(list, canvas);
 		}
 	}
 	private LinkedList<LinkedList<Message>> makeStackMessages(){
@@ -303,13 +303,13 @@ public class Canvas {
 		return listStacks;
 	}
 	
-	private void updatePosStackMessages(LinkedList<Message> stackMessage) {
+	private void updatePosStackMessages(LinkedList<Message> stackMessage, Canvas canvas) {
 
 		Message m1 = stackMessage.get(0);
-		int x1 = m1.getReicevedBy().getPosComm().getX();
-		int x2 = m1.getSentBy().getPosComm().getX();
-		int y1 = m1.getReicevedBy().getPosComm().getY();
-		int y2 = m1.getSentBy().getPosComm().getY();
+		int x1 = m1.getReicevedBy().getPosComm(canvas).getX();
+		int x2 = m1.getSentBy().getPosComm(canvas).getX();
+		int y1 = m1.getReicevedBy().getPosComm(canvas).getY();
+		int y2 = m1.getSentBy().getPosComm(canvas).getY();
 		
 		int xLabel;
 		int yLabel;
@@ -347,7 +347,7 @@ public class Canvas {
 		}
 		int yLabelUpdate = yLabel;
 		for( Message m : stackMessage){
-			m.getLabel().setLabelPositionComm(xLabel, yLabelUpdate);
+			m.getLabel().setPosComm(xLabel, yLabelUpdate, canvas);
 			yLabelUpdate += 20;
 		}
 	}

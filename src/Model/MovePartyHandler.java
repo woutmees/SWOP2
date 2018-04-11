@@ -39,19 +39,19 @@ public class MovePartyHandler extends Handler {
 		
 		// Change Coordinates
 		if(canvas.isSequenceDiagram()) {
-			selected.setPosSeq(x, selected.getPosSeq().getY());
-			selected.getLabel().setLabelPositionSeq(x,selected.getLabel().getLabelPositionSequence().getY());
+			selected.setPosSeq(x, selected.getPosSeq(canvas).getY(), canvas);
+			selected.getLabel().setPosSeq(x,selected.getLabel().getPosSeq(canvas).getY(),canvas);
 			for (Message m : canvas.getMessages()) {
 				if ((m.getSentBy() == selected) || (m.getReicevedBy() == selected)) {
-					int xLabel = Math.max(m.getReicevedBy().getPosSeq().getX(), m.getSentBy().getPosSeq().getX()) - Math.abs( (m.getReicevedBy().getPosSeq().getX() - m.getSentBy().getPosSeq().getX() )/2);
-					int yLabel = m.getLabel().getLabelPositionSequence().getY();
-					m.getLabel().setLabelPositionSeq(new Point(xLabel, yLabel));
+					int xLabel = Math.max(m.getReicevedBy().getPosSeq(canvas).getX(), m.getSentBy().getPosSeq(canvas).getX()) - Math.abs( (m.getReicevedBy().getPosSeq(canvas).getX() - m.getSentBy().getPosSeq(canvas).getX() )/2);
+					int yLabel = m.getLabel().getPosSeq(canvas).getY();
+					m.getLabel().setPosSeq(xLabel, yLabel, canvas);
 				}
 			}
 		}
 		if(!canvas.isSequenceDiagram()) {
-			selected.setPosComm(x-selected.getLabel().getWidth()/2, y);
-			selected.getLabel().setLabelPositionComm(x,y);
+			selected.setPosComm(x-selected.getLabel().getWidth()/2, y, canvas);
+			selected.getLabel().setPosComm(x,y,canvas);
 		}
 	}
 

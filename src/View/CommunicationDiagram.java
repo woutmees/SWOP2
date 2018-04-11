@@ -71,14 +71,14 @@ public class CommunicationDiagram extends View {
 
 
 		randNumberPos = new Random();
-		c.updatePosComm();
-		drawParties();
-		drawMessages();
+		c.updatePosComm(c);
+		drawParties(c);
+		drawMessages(c);
 	}
 
-	private void drawMessages(){
+	private void drawMessages(Canvas c){
 		int[] messageNumber = new int[parties.size()];
-		Party[] parties = createPartyIndex();
+		Party[] parties = createPartyIndex(c);
 				
 		LinkedList<Message> sortedListOfMessage = Canvas.messageSort(new LinkedList<Message>(messages));
 		for( Message m : sortedListOfMessage) {
@@ -97,22 +97,22 @@ public class CommunicationDiagram extends View {
 				if(m.getLabel().getSelected()){
 					graph.setColor(Color.RED);
 				}
-				graph.drawString(printMessageNumber(messageNumber)+": "+ visibleName, m.getLabel().getLabelPositionComm().getX(), m.getLabel().getLabelPositionComm().getY());
+				graph.drawString(printMessageNumber(messageNumber)+": "+ visibleName, m.getLabel().getPosComm(c).getX(), m.getLabel().getPosComm(c).getY());
 				graph.setColor(Color.BLACK);
-				drawArrow(m, m.getLabel().getLabelPositionComm().getX() -10, m.getLabel().getLabelPositionComm().getY()-(m.getLabel().getHeight()/2));
+				drawArrow(m, m.getLabel().getPosComm(c).getX() -10, m.getLabel().getPosComm(c).getY()-(m.getLabel().getHeight()/2), c);
 			} 
 			
 			// Draw line between two parties
-			int x1 = m.getReicevedBy().getPosComm().getX();
-			int x2 = m.getSentBy().getPosComm().getX();
-			int y1 = m.getReicevedBy().getPosComm().getY();
-			int y2 = m.getSentBy().getPosComm().getY();
+			int x1 = m.getReicevedBy().getPosComm(c).getX();
+			int x2 = m.getSentBy().getPosComm(c).getX();
+			int y1 = m.getReicevedBy().getPosComm(c).getY();
+			int y2 = m.getSentBy().getPosComm(c).getY();
 			graph.drawLine(x1,y1,x2,y2);
 			// Draw arrow for message
 		}
 	}
 	
-	private Party[] createPartyIndex() {
+	private Party[] createPartyIndex(Canvas c) {
 		
 		Party[] result = new Party[parties.size()];
 		int i = 0;
@@ -122,13 +122,13 @@ public class CommunicationDiagram extends View {
 			i++;
 		}
 		
-		return sortParties(result);
+		return sortParties(result, c);
 		
 	}
 
 	
 	//TODO Efficiency
-	private Party[] sortParties(Party[] result) {
+	private Party[] sortParties(Party[] result, Canvas c) {
 		Party[] u = result;
 		Party[] s = new Party[result.length];
 		
@@ -138,7 +138,7 @@ public class CommunicationDiagram extends View {
 			for(int j=0; j<u.length; j++) {
 				if(u[j]==null) {}
 				else if(next==null) {next = u[j];index = j;}
-				else if(u[j].getPosSeq().getX()<next.getPosSeq().xCoordinate) {next = u[j];index = j;}
+				else if(u[j].getPosSeq(c).getX()<next.getPosSeq(c).xCoordinate) {next = u[j];index = j;}
 			}
 			u[index]=null;
 			s[i]=next;
@@ -168,13 +168,13 @@ public class CommunicationDiagram extends View {
 		return s;
 	}
 	
-	private void drawArrow(Message message, int x3,int y3) {
+	private void drawArrow(Message message, int x3,int y3, Canvas c) {
 		// Length Vector
 		
-		int x1 = message.getReicevedBy().getPosComm().getX();
-		int x2 = message.getSentBy().getPosComm().getX();
-		int y1 = message.getReicevedBy().getPosComm().getY();
-		int y2 = message.getSentBy().getPosComm().getY();
+		int x1 = message.getReicevedBy().getPosComm(c).getX();
+		int x2 = message.getSentBy().getPosComm(c).getX();
+		int y1 = message.getReicevedBy().getPosComm(c).getY();
+		int y2 = message.getSentBy().getPosComm(c).getY();
 		
 		double  lengthArrow = Math.sqrt(  (Math.pow(Math.abs(x2-x1),2)) +  (Math.pow(Math.abs(y2-y1),2))  );
 		double A = Math.abs(x2-x1);
@@ -207,19 +207,19 @@ public class CommunicationDiagram extends View {
 		
 	}
 
-	private void  drawParties() {
+	private void  drawParties(Canvas c) {
 		for( Party partyToDraw : this.parties) {
-			drawParty(partyToDraw);
+			drawParty(partyToDraw,c);
 		}
 	}
-	private void drawParty(Party p) {
+	private void drawParty(Party p, Canvas c) {
 		// Check if party already has a position in Communication diagram. If default (0,0) -> place Party at random place
-		if( p.getPosComm().getX() == 0 || p.getPosComm().getY() ==  0 ) {
+		if( p.getPosComm(c).getX() == 0 || p.getPosComm(c).getY() ==  0 ) {
 			
 			int xNew = randNumberPos.nextInt(600) + 20;
 			int yNew = randNumberPos.nextInt(600) + 20;
 			//TODO Put in EditLabelHandler
-			p.setPosComm(xNew, yNew);
+			p.setPosComm(xNew, yNew, c);
 		}
 		int rectWidth = p.getLabel().getWidth();
 
@@ -230,24 +230,24 @@ public class CommunicationDiagram extends View {
 		if( p.getClass() == Model.Actor.class ) {
 			// Draw Actor as skelet 
 
-			graph.drawArc(p.getPosComm().getX(), p.getPosComm().getY(), 10, 10, 0, 360);
-			graph.drawArc(p.getPosComm().getX()-10, p.getPosComm().getY()+10, 30, 30, 0, 360);
-			double hartx = p.getPosComm().getX()+5;
-			double harty = p.getPosComm().getY()+25;
+			graph.drawArc(p.getPosComm(c).getX(), p.getPosComm(c).getY(), 10, 10, 0, 360);
+			graph.drawArc(p.getPosComm(c).getX()-10, p.getPosComm(c).getY()+10, 30, 30, 0, 360);
+			double hartx = p.getPosComm(c).getX()+5;
+			double harty = p.getPosComm(c).getY()+25;
 			graph.drawLine((int) hartx - 11, (int) harty - 11 , (int) hartx - 14 , (int) harty-14);
 			graph.drawLine((int) hartx + 11, (int) harty - 11 , (int) hartx + 14 , (int) harty-14);
 			graph.drawLine((int) hartx - 11, (int) harty + 11 , (int) hartx - 14 , (int) harty+14);
 			graph.drawLine((int) hartx + 11, (int) harty + 11 , (int) hartx + 14 , (int) harty+14);
 		}
 		//Draw label + labelName
-		graph.drawRect(p.getPosComm().getX(), p.getPosComm().getY()-20, rectWidth, p.getLabel().getHeight());
+		graph.drawRect(p.getPosComm(c).getX(), p.getPosComm(c).getY()-20, rectWidth, p.getLabel().getHeight());
 		graph.setColor(Color.BLACK);
 		
 		if(p.getLabel().getSelected()){
 			graph.setColor(Color.RED);
 		}
 		
-		graph.drawString(p.getLabel().getLabelname(), p.getPosComm().getX()+5, p.getPosComm().getY()+13-20);
+		graph.drawString(p.getLabel().getLabelname(), p.getPosComm(c).getX()+5, p.getPosComm(c).getY()+13-20);
 		graph.setColor(Color.BLACK);
 	}
 }

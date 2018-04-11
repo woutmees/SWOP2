@@ -99,7 +99,7 @@ public class Screen {
 	
 	public void keyPressed(int id, int keyCode, char keyChar) {
 
-		if( ctrlPressed && keyCode == 68 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED)) {
+		if( ctrlPressed && keyCode == 78 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED)) {
 			// New interaction
 			System.out.println("############ New Interaction Made ######################");
 			Interaction i = new Interaction();
@@ -107,7 +107,7 @@ public class Screen {
 			for( Canvas c : i.getSubWindows()) {
 				subWindows.push(c);
 			}
-		}else if ( !interactions.isEmpty() && ctrlPressed && keyCode == 78 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) ) {
+		}else if ( !interactions.isEmpty() && ctrlPressed && keyCode == 68 && (id == KeyEvent.KEY_PRESSED || id == KeyEvent.KEY_TYPED) ) {
 			// Add new Subwindow to current Interaction
 			Interaction i = subWindows.lastElement().getInteraction();
 			int xOrigineRandom = randNumberPos.nextInt(250);

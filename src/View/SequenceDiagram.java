@@ -58,18 +58,24 @@ public class SequenceDiagram extends View {
 		
 		//Draw all parties, their lifelines and their labels.
 		for (Party a : c.getParties()) {
-			drawnParties.add(new DrawnParty(a.getPosSeq().getX(), a));
+			drawnParties.add(new DrawnParty(a.getPosSeq(c).getX(), a));
 			if (a.getSelected())
 				g.setColor(Color.RED);
 			if (a.getClass() == Model.Actor.class) {
-				drawStickFigure(g, c, a.getPosSeq().getX(), a.getPosSeq().getY());
-				g.drawRect(a.getLabel().getLabelPositionSequence().getX() - a.getLabel().getWidth()/2, a.getLabel().getLabelPositionSequence().getY() - a.getLabel().getHeight()/2, a.getLabel().getWidth(), a.getLabel().getHeight());
+				drawStickFigure(g, c, a.getPosSeq(c).getX(), a.getPosSeq(c).getY());
+				g.drawRect(a.getLabel().getPosSeq(c).getX() - a.getLabel().getWidth()/2, a.getLabel().getPosSeq(c).getY() - a.getLabel().getHeight()/2, a.getLabel().getWidth(), a.getLabel().getHeight());
 			} else if (a.getClass() == Model.Object.class) {
 				//g.drawRect(a.getPosSeq().getX()-a.getWidth()/2, a.getPosSeq().getY()-a.getHeight()/2, a.getWidth(), a.getHeight());
-				g.drawRect(a.getLabel().getLabelPositionSequence().getX() - a.getLabel().getWidth()/2, a.getLabel().getLabelPositionSequence().getY() - a.getLabel().getHeight()/2, a.getLabel().getWidth(), a.getLabel().getHeight());
+				g.drawRect(
+						a.getLabel().getPosSeq(c).getX() 
+						- a.getLabel().getWidth()/2, 
+						a.getLabel().getPosSeq(c).getY() 
+						- a.getLabel().getHeight()/2, 
+						a.getLabel().getWidth(), 
+						a.getLabel().getHeight());
 			}
 			g.setColor(Color.BLACK);
-			drawLifeline(c, g, a.getPosSeq().getX());
+			drawLifeline(c, g, a.getPosSeq(c).getX());
 			drawLabel(g, c, a.getLabel());
 		}
 		
@@ -154,8 +160,8 @@ public class SequenceDiagram extends View {
 	private void drawLabel(Graphics g, Canvas c, Label label) {
 		if (label.getSelected())
 			g.setColor(Color.RED);
-		int x = label.getLabelPositionSequence().getX();
-		int y = label.getLabelPositionSequence().getY();
+		int x = label.getPosSeq(c).getX();
+		int y = label.getPosSeq(c).getY();
 		int width = label.getWidth();
 		int height = label.getHeight();
 		//g.drawRect(x - width/2, y - height/2, width, height);
@@ -179,7 +185,7 @@ public class SequenceDiagram extends View {
 	private void drawActivationBar(Graphics g, Canvas c, Party p, int y1, int y2) {
 		int rectangleWidth = 6;
 		int outward = 3;
-		g.drawRect(p.getPosSeq().getX()-(rectangleWidth/2), y1-outward, rectangleWidth, (y2-y1)+(2*outward));
+		g.drawRect(p.getPosSeq(c).getX()-(rectangleWidth/2), y1-outward, rectangleWidth, (y2-y1)+(2*outward));
 	}
 	
 	private class DrawnParty {

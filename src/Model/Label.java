@@ -1,4 +1,7 @@
 package Model;
+
+import java.util.ArrayList;
+
 /**
  * Label of a message or party
  * 
@@ -12,6 +15,9 @@ public class Label {
 	private boolean selected;
 	private int width = 50;
 	private int height = 20;
+	
+	private ArrayList<Coordinate> coordComm = new ArrayList<Coordinate>();
+	private ArrayList<Coordinate> coordSeq = new ArrayList<Coordinate>();
 	
 	/**
 	 * 
@@ -48,18 +54,14 @@ public class Label {
 	 * 
 	 * @return
 	 */
-	public Point getLabelPositionSequence() {
-		return labelPositionSeq;
+	
+	public Point getPosSeq(Canvas canvas) {
+		for(Coordinate c : coordSeq) {
+			if(c.getCanvas()==canvas) {return c.getCoordinate();}
+		}
+		return null;
 	}
-	/**
-	 * 
-	 * Sets the label on the given position in the sequence diagram
-	 * 
-	 * @param labelPositionSeq
-	 */
-	public void setLabelPositionSeq(Point labelPositionSeq) {
-		this.labelPositionSeq = labelPositionSeq;
-	}
+
 	/**
 	 * 
 	 * Sets the label on the given x and y coordinate in the sequence diagram
@@ -67,28 +69,27 @@ public class Label {
 	 * @param x
 	 * @param y
 	 */
-	public void setLabelPositionSeq(int x, int y) {
-		labelPositionSeq.xCoordinate = x;
-		labelPositionSeq.yCoordinate = y;
+	
+	public void setPosSeq(int x, int y, Canvas canvas) {
+		for(Coordinate c : coordSeq) {
+			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);}
+		}
 	}
+	
 	/**
 	 * 
 	 * Returns the label position in the communication diagram
 	 * 
 	 * @return
 	 */
-	public Point getLabelPositionComm() {
-		return labelPositionComm;
+	
+	public Point getPosComm(Canvas canvas) {
+		for(Coordinate c : coordComm) {
+			if(c.getCanvas()==canvas) {return c.getCoordinate();}
+		}
+		return null;
 	}
-	/**
-	 * 
-	 * Sets the label on the given position in the communication diagram
-	 * 
-	 * @param labelPositionComm
-	 */
-	public void setLabelPositionComm(Point labelPositionComm) {
-		this.labelPositionComm = labelPositionComm;
-	}
+	
 	/**
 	 * 
 	 * Sets the label on the given x and y coordinate in the sequence diagram
@@ -96,10 +97,18 @@ public class Label {
 	 * @param x
 	 * @param y
 	 */
-	public void setLabelPositionComm(int x, int y) {
-		labelPositionComm.xCoordinate = x;
-		labelPositionComm.yCoordinate = y;
+
+	void setPosComm(int x, int y, Canvas canvas) {
+		for(Coordinate c : coordComm) {
+			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);}
+		}
 	}
+	
+	void addToCanvas(Canvas c, int xSeq, int ySeq, int xComm, int yComm) {
+		coordSeq.add(new Coordinate(c, new Point(xSeq,ySeq)));
+		coordComm.add(new Coordinate(c, new Point(xComm, yComm)));
+	}
+	
 	/**
 	 * 
 	 * Returns True if the label is selected

@@ -23,15 +23,15 @@ public abstract class Handler {
 			int width;
 			int height;
 			if(p.getClass() == Model.Object.class) {
-				xPos = p.getLabel().getLabelPositionSequence().getX();
-				yPos = p.getLabel().getLabelPositionSequence().getY();
+				xPos = p.getLabel().getPosSeq(canvas).xCoordinate;
+				yPos = p.getLabel().getPosSeq(canvas).yCoordinate;
 				width = p.getWidth()+3;
 				height = p.getHeight()+6;
 			} else {
-				xPos = p.getLabel().getLabelPositionSequence().getX();
-				yPos = p.getPosSeq().getY();
+				xPos = p.getLabel().getPosSeq(canvas).getX();
+				yPos = p.getPosSeq(canvas).yCoordinate;
 				width = p.getWidth();
-				height = p.getPosSeq().getY() + p.getHeight() + 10 + p.getLabel().getHeight();
+				height = p.getPosSeq(canvas).yCoordinate+ p.getHeight() + 10 + p.getLabel().getHeight();
 			}
 			if( 
 					isInArea(
@@ -60,8 +60,8 @@ public abstract class Handler {
 					isInAreaCommunication(
 							x,
 							y,
-							(p.getPosComm().getX()-6),
-							(p.getPosComm().getY()-(p.getLabel().getHeight()+6)),
+							(p.getPosComm(canvas).getX()-6),
+							(p.getPosComm(canvas).getY()-(p.getLabel().getHeight()+6)),
 							(p.getLabel().getWidth()+12),
 							height
 							)

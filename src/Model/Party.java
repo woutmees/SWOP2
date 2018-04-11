@@ -1,5 +1,6 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -7,9 +8,7 @@ import java.util.Random;
  */
 public abstract class Party {
 
-	private String className; 
-	private Point posSeq;
-	private Point posComm;
+	private String className;
 	private boolean selected;
 	private Label label;
 	private int height = 30;
@@ -17,6 +16,9 @@ public abstract class Party {
 	private boolean lifeLineSelected = false;
 	private String role = "none";
 	private Random randNumberPos;
+	
+	private ArrayList<Coordinate> coordComm = new ArrayList<Coordinate>();
+	private ArrayList<Coordinate> coordSeq = new ArrayList<Coordinate>();
 	
 	private int selectedYPosition;
 
@@ -33,8 +35,9 @@ public abstract class Party {
 		int xNew = randNumberPos.nextInt(600) + 20;
 		int yNew = randNumberPos.nextInt(600) + 20;
 		
-		this.posComm = new Point(xNew, yNew); // default position
-		this.posSeq = new Point(0,0); //default position
+		//TODO Check new coord system
+		//this.posComm = new Point(xNew, yNew); // default position
+		//this.posSeq = new Point(0,0); //default position
 	}
 	
 	/**
@@ -49,8 +52,12 @@ public abstract class Party {
 	 * Returns the position of this party in the sequence diagram.
 	 * @return		The party's position in the sequence diagram.
 	 */
-	public Point getPosSeq() {
-		return posSeq;
+	
+	public Point getPosSeq(Canvas canvas) {
+		for(Coordinate c : coordSeq) {
+			if(c.getCanvas()==canvas) {return c.getCoordinate();}
+		}
+		return null;
 	}
 	
 	/**
@@ -58,16 +65,23 @@ public abstract class Party {
 	 * @param x		The given x coordinate.
 	 * @param y		The given y coordinate.
 	 */
-	public void setPosSeq(int x, int y ) {
-		this.posSeq = new Point(x,y);
+	
+	public void setPosSeq(int x, int y, Canvas canvas) {
+		for(Coordinate c : coordSeq) {
+			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);}
+		}
 	}
 	
 	/**
 	 * Returns the position of this party in the communication diagram.
 	 * @return		The party's position in the communication diagram.
 	 */
-	public Point getPosComm() {
-		return posComm;
+	
+	public Point getPosComm(Canvas canvas) {
+		for(Coordinate c : coordComm) {
+			if(c.getCanvas()==canvas) {return c.getCoordinate();}
+		}
+		return null;
 	}
 	
 	/**
@@ -75,8 +89,15 @@ public abstract class Party {
 	 * @param x		The given x coordinate.
 	 * @param y		The given y coordinate.
 	 */
-	public void setPosComm(int x, int y) {
-		this.posComm = new Point(x,y);
+	public void setPosComm(int x, int y, Canvas canvas) {
+		for(Coordinate c : coordComm) {
+			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);}
+		}
+	}
+	
+	void addToCanvas(Canvas c, int xSeq, int ySeq, int xComm, int yComm) {
+		coordSeq.add(new Coordinate(c, new Point(xSeq,ySeq)));
+		coordComm.add(new Coordinate(c, new Point(xComm, yComm)));
 	}
 	
 	/**

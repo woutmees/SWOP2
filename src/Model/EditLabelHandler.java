@@ -33,9 +33,9 @@ public class EditLabelHandler {
 			} else if (character == KeyEvent.VK_ESCAPE)
 				return;			
 			if(canvas.isSequenceDiagram())
-				label.setLabelPositionSeq(new Point(x, y));
+				label.setPosSeq(x, y, canvas);
 			else 
-				label.setLabelPositionComm(new Point(x, y));
+				label.setPosComm(x, y, canvas);
 			String name = label.getLabelname().replace("|", "") + character + '|';
 			label.setLabelname(name);
 			int width = 8*name.length();
@@ -69,9 +69,9 @@ public class EditLabelHandler {
 			} else if (character == KeyEvent.VK_ESCAPE)
 				return;			
 			if(canvas.isSequenceDiagram())
-				label.setLabelPositionSeq(new Point(x, y));
+				label.setPosSeq(x, y, canvas);
 			else 
-				label.setLabelPositionComm(new Point(x, y));
+				label.setPosComm(x, y, canvas);
 			String name = label.getLabelname().replace("|", "") + character + '|';
 			label.setLabelname(name);
 			int width = 8*name.length();

@@ -11,9 +11,11 @@ public class DeleteElementHandler {
 	/**
 	 * Handles an element being deleted on the canvas.
 	 * @param canvas		The canvas to edit.
+	 * @param subWindows 
 	 */
 	
-	public static void handle(Canvas canvas) {
+	public static void handle(Canvas canvas, ArrayList<Canvas> subWindows) {
+		
 		LinkedList<Party> toDeleteParties = new LinkedList<Party>();
 		LinkedList<Message> toDeleteMessages = new LinkedList<Message>();
 		
@@ -40,33 +42,39 @@ public class DeleteElementHandler {
 				toDeleteMessages.add(messageElement);
 			}
 		}
-		//Delete Parties from canvas
-		for( Party partyToDelete : toDeleteParties ) {
-			canvas.getParties().remove(partyToDelete);
-		}
 		
-		//Delete Message from canvas
-		for( Message messageToDelete : toDeleteMessages) {
+		// Delete elements from all windows in this interaction
+		for(Canvas c : subWindows) {
+		
+			//Delete Parties from canvas
+			for( Party partyToDelete : toDeleteParties ) {
+				c.getParties().remove(partyToDelete);
+			}
 			
-			// Delete all message that have a higher order and below the order of the resultmessage order(correcting sequence diagram!)
-			if( messageToDelete.getClass() == Model.InvocationMessage.class) {
-				int orderResultMessage = messageToDelete.getResult().getOrder();
-				ArrayList<Message> tempList = new ArrayList<Message>();
-				for(Message m :canvas.getMessages()) {
-			
-					if( m.getOrder() > messageToDelete.getOrder() && orderResultMessage >= m.getOrder()) {
-						tempList.add(m);
+			//Delete Message from canvas
+			for( Message messageToDelete : toDeleteMessages) {
+				
+				// Delete all message that have a higher order and below the order of the resultmessage order(correcting sequence diagram!)
+				if( messageToDelete.getClass() == Model.InvocationMessage.class) {
+					int orderResultMessage = messageToDelete.getResult().getOrder();
+					ArrayList<Message> tempList = new ArrayList<Message>();
+					for(Message m :c.getMessages()) {
+				
+						if( m.getOrder() > messageToDelete.getOrder() && orderResultMessage >= m.getOrder()) {
+							tempList.add(m);
+						}
+					}
+					for(Message m:tempList) {
+						c.getMessages().remove(m);
 					}
 				}
-				for(Message m:tempList) {
-					canvas.getMessages().remove(m);
-				}
+				c.getMessages().remove(messageToDelete); //delete message itself
+				if(messageToDelete.getClass()==InvocationMessage.class){c.getResultQueue().remove(messageToDelete.getResult());}
+				c.updateLabels(c);
 			}
-			canvas.getMessages().remove(messageToDelete); //delete message itself
-			if(messageToDelete.getClass()==InvocationMessage.class){canvas.getResultQueue().remove(messageToDelete.getResult());}
-			canvas.updateLabels();
+			
+			c.updateLabels(c);
 		}
 		
-		canvas.updateLabels();
 	}
 }

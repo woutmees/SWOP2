@@ -1,26 +1,28 @@
 package Model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
 /**
  * A handler handles the actions of a message being added to the canvas.
  */
-public class AddMessageHandler extends Handler {
+public class AddMessageHandler {
 	
 	/**
 	 * Handles a message being added to the canvas
 	 * @param canvas		The canvas to edit.
 	 * @param x			Unused.
 	 * @param y			Unused.
+	 * @param subWindows 
 	 */
-	public static void handle(Canvas canvas, int x, int y) {
+	public static void handle(Canvas canvas, int x, int y, ArrayList<Canvas> subWindows) {
 		Party sender = null;
 		Party receiver = null;
 		
 		// Determine receiver
 		for(Party r : canvas.getParties()) {
-			if(approxLifeLine(r, x)) {
+			if(approxLifeLine(r, x, canvas)) {
 				receiver = r;
 				r.setSelectedYPosition(y);
 				break;}
@@ -74,21 +76,30 @@ public class AddMessageHandler extends Handler {
 			// Handle Invocation Message
 			Label labelInvocation = new Label("   ");
 			labelInvocation.setSelected(true);
-			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
+			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq(canvas).getX(), invocationMessage.getSentBy().getPosSeq(canvas).getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq(canvas).getX() - invocationMessage.getSentBy().getPosSeq(canvas).getX() )/2);
 			int invocLabelY = canvas.getOrigineY() +canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
-			labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
+			labelInvocation.setPosSeq(invocLabelX, invocLabelY, canvas);
 			
 			// First all the orders needs to be updated because of the number of predecessors
 			for (Message m : canvas.getMessages()) {
 				if( m.getClass()==Model.InvocationMessage.class) {
-					m.getLabel().setLabelPositionSeq(m.getLabel().getLabelPositionSequence().getX(), canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, m)));
+					m.getLabel().setPosSeq(m.getLabel().getPosSeq(canvas).getX(), canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, m)), canvas);
 				}
 			}
 			
 			
 			EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
 			invocationMessage.setLabel(labelInvocation);
-					
+			
+			// Add message to all windows of the interaction
+			for(Canvas c : subWindows) {
+				if(c!=canvas) {
+					c.addMessage(invocationMessage);
+					c.addMessage(resultMessage);
+				}
+			}
+			
+			
 		}
 		// Reset roles
 		resetRoles(canvas);
@@ -96,9 +107,9 @@ public class AddMessageHandler extends Handler {
 			
 	}
 	
-	private static boolean approxLifeLine(Party p, int x) {
-		return (p.getPosSeq().xCoordinate-30)<x &&
-				(p.getPosSeq().xCoordinate+30)>x;
+	private static boolean approxLifeLine(Party p, int x, Canvas canvas) {
+		return (p.getPosSeq(canvas).xCoordinate-30)<x &&
+				(p.getPosSeq(canvas).xCoordinate+30)>x;
 	}
 
 	private static int getMaxOrder(Canvas canvas) {
