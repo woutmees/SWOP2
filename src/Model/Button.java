@@ -1,5 +1,6 @@
 package Model;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Button {
@@ -29,6 +30,9 @@ public class Button {
 	}
 	
 	public void draw(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(OrigineX , OrigineY, width, height);
+		g.setColor(Color.BLACK);
 		g.drawRect(OrigineX , OrigineY, width, height);
 		g.drawLine(OrigineX, OrigineY, OrigineX+ width, OrigineY +height);
 		g.drawLine(OrigineX , OrigineY + height , OrigineX + width , OrigineY);

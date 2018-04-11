@@ -1,5 +1,6 @@
 package Model;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class titleBar {
@@ -44,6 +45,9 @@ public class titleBar {
 		this.OrigineY = c.getOrigineY();
 		
 		// Title Bar
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(OrigineX, OrigineY, c.getWidth(), height);
+		g.setColor(Color.BLACK);
 		g.drawRect(OrigineX, OrigineY, c.getWidth(), height);
 		g.drawString(title, OrigineX + 20 , OrigineY + 14);
 		
