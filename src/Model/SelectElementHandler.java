@@ -83,8 +83,8 @@ public class SelectElementHandler extends Handler {
 					party.setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY, canvas);
 					party.setPosSeq(party.getPosSeq(canvas).xCoordinate+differenceX, party.getPosSeq(canvas).yCoordinate+differenceY, canvas);
 					party.getLabel().setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY+party.getLabel().getHeight(), canvas);
-					//TODO +2*label.height
-					party.getLabel().setPosSeq(party.getPosSeq(canvas).xCoordinate+differenceX, party.getPosSeq(canvas).yCoordinate+differenceY+2*party.getLabel().getHeight(), canvas);
+					//TODO +2*label.height 
+					party.getLabel().setPosSeq(party.getLabel().getPosSeq(canvas).xCoordinate+differenceX, party.getLabel().getPosSeq(canvas).yCoordinate+differenceY, canvas);
 				}
 				
 			}
