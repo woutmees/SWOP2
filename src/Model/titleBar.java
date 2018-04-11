@@ -74,12 +74,8 @@ public class titleBar {
 		OrigineY = origineY;
 	}
 	public int getWidth(Canvas c) {
-		if ( c.isSequenceDiagram()) {
-			title = "Sequence Diagram";
-		} else  {
-			title = "Communication Diagram";
-		}
-		return 8*title.length();
+		// Longest String (Switching views....)
+		return 8*"Communication Diagram".length();
 	}
 	public int getHeight() {
 		return height;

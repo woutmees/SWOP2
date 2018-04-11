@@ -416,13 +416,13 @@ public class Canvas {
 		this.mode = m;
 	}
 	public void resizeXCanvas(int xMouse) {
-		if(this.width > this.getFramework().getBar().getWidth(this) ) {
-			this.width = xMouse - this.getOrigineX();
+		if(this.origineX + this.getFramework().getBar().getWidth(this) < xMouse ) {
+			this.width = Math.max(this.getFramework().getBar().getWidth(this)+4, xMouse - this.getOrigineX());
 		}
 	}
 	public void resizeYCanvas(int yMouse) {
-		if(this.height > this.getFramework().getBar().getHeight() ) {
-			this.height = yMouse - this.getOrigineY();
+		if(this.origineY + this.getFramework().getBar().getHeight() < yMouse) {
+			this.height =  Math.max(this.getFramework().getBar().getHeight()+4, yMouse - this.getOrigineY());
 		}
 	}
 
@@ -435,11 +435,11 @@ public class Canvas {
 	}
 
 	public void resizeCornerCanvas(int xMouse, int yMouse) {
-		if(this.height > this.getFramework().getBar().getHeight() ) {
-			this.height = yMouse - this.getOrigineY();
+		if(this.origineX + this.getFramework().getBar().getHeight() < xMouse) {
+			this.height = Math.max(this.getFramework().getBar().getHeight()+4, yMouse - this.getOrigineY());
 		}
-		if(this.width > this.getFramework().getBar().getWidth(this) ) {
-			this.width = xMouse - this.getOrigineX();
+		if(this.origineY + this.getFramework().getBar().getWidth(this) < yMouse ) {
+			this.width = Math.max(this.getFramework().getBar().getWidth(this)+4, xMouse - this.getOrigineX());
 		}
 	}
 	
