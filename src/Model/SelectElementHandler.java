@@ -58,6 +58,7 @@ public class SelectElementHandler extends Handler {
 			
 			if(l!=null) {l.setSelected(true);}
 			if(p!=null) {p.setSelected(true);}
+			
 		}
 		
 		else if(id == Mouse.PRESSED) {
@@ -72,20 +73,27 @@ public class SelectElementHandler extends Handler {
 			if( moveCanvas(canvas, x,y)) {
 				canvas.setOrigineX(x-(canvas.getFramework().getBar().getWidth(canvas)/2));
 				canvas.setOrigineY(y-(canvas.getFramework().getBar().getHeight()/2));
+				
+				int newOriginX = canvas.getOrigineX();
+				int newOriginY = canvas.getOrigineY();
+				
+				int differenceX = newOriginX - previousOriginX;
+				int differenceY = newOriginY - previousOriginY;
+				
 				for(Party party : canvas.getParties()) {
-					
-					int newOriginX = canvas.getOrigineX();
-					int newOriginY = canvas.getOrigineY();
-					
-					int differenceX = newOriginX - previousOriginX;
-					int differenceY = newOriginY - previousOriginY;
 					
 					party.setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY, canvas);
 					party.setPosSeq(party.getPosSeq(canvas).xCoordinate+differenceX, party.getPosSeq(canvas).yCoordinate+differenceY, canvas);
-					party.getLabel().setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY+party.getLabel().getHeight(), canvas);
-					//TODO +2*label.height 
+					party.getLabel().setPosComm(party.getPosComm(canvas).xCoordinate+differenceX, party.getPosComm(canvas).yCoordinate+differenceY, canvas);
 					party.getLabel().setPosSeq(party.getLabel().getPosSeq(canvas).xCoordinate+differenceX, party.getLabel().getPosSeq(canvas).yCoordinate+differenceY, canvas);
 				}
+				for(Message m : canvas.getMessages()) {
+					if(m.getClass()==InvocationMessage.class) {
+						m.getLabel().setPosSeq(m.getLabel().getPosSeq(canvas).xCoordinate+differenceX, m.getLabel().getPosSeq(canvas).yCoordinate+differenceY, canvas);
+						m.getLabel().setPosComm(m.getLabel().getPosComm(canvas).xCoordinate+differenceX, m.getLabel().getPosComm(canvas).yCoordinate+differenceY, canvas);
+					}
+				}
+			
 				
 			}
 			else if( resizeCornerCanvas(canvas, x, y)) {
