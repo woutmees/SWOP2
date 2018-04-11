@@ -25,7 +25,6 @@ public class AddMessageHandler extends Handler {
 				r.setSelectedYPosition(y);
 				break;}
 		}
-		
 		// Determine sender
 		for(Party p : canvas.getParties()) {
 			if(p.getRole()=="sender") {sender = p;}
@@ -76,7 +75,7 @@ public class AddMessageHandler extends Handler {
 			Label labelInvocation = new Label("   ");
 			labelInvocation.setSelected(true);
 			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq().getX(), invocationMessage.getSentBy().getPosSeq().getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq().getX() - invocationMessage.getSentBy().getPosSeq().getX() )/2);
-			int invocLabelY = canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
+			int invocLabelY = canvas.getOrigineY() +canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
 			labelInvocation.setLabelPositionSeq(new Point(invocLabelX, invocLabelY));
 			
 			// First all the orders needs to be updated because of the number of predecessors
@@ -160,7 +159,7 @@ public class AddMessageHandler extends Handler {
 		Message lastMessage =  null;
 		Message lastMessagePlusOne = null;
 		for (Message m : sortedList) {
-			int yPostionMessage = canvas.getHeight()/6 + 50 + (50 * getAmountPredecessors(canvas,m));
+			int yPostionMessage = canvas.getOrigineY() + canvas.getHeight()/6 + 50 + (50 * getAmountPredecessors(canvas,m));
 			int YUpper = yPostionMessage + 49;
 			if ( firstClick > yPostionMessage && secondClick > yPostionMessage && firstClick < YUpper && secondClick < YUpper ) {
 				stackParties.push(m.getReicevedBy());
@@ -205,7 +204,7 @@ public class AddMessageHandler extends Handler {
 		messages.addAll(canvas.getMessages());
 		for ( Message m : messages) {
 			// Height for messages used in sequence diagram=======
-			int y = canvas.getHeight()/6 + 50 + (50 * getAmountPredecessors(canvas,m));
+			int y = canvas.getOrigineY() + canvas.getHeight()/6 + 50 + (50 * getAmountPredecessors(canvas,m));
 			int upperY = y + 49;
 			// ===================================================
 			if( (m.getReicevedBy()== sender) && (receiver.getSelectedYPosition() > y) && (sender.getSelectedYPosition() > y) && (receiver.getSelectedYPosition() < upperY) && (sender.getSelectedYPosition() < upperY)) {

@@ -98,7 +98,7 @@ public class SequenceDiagram extends View {
 	}
 
 	private void drawLifeline(Canvas c, Graphics g, int x) {
-		g.drawLine(x, (c.getHeight()/6)+10, x, c.getHeight()-10);
+		g.drawLine(x, c.getOrigineY()+ (c.getHeight()/6)+10+titleBar.getHeight(), x, c.getOrigineY()+ c.getHeight()-10);
 	}
 	
 	private void drawMessage(Canvas c, Graphics g, Message message, int y) {

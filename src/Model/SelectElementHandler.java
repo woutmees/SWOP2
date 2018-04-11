@@ -123,13 +123,10 @@ public class SelectElementHandler extends Handler {
 		deselectMessages(canvas);
 	}
 	
-	//TODO: HELEMAAL NIET NETJES! misschien moet de regex van de label meegegeven worden in party in model
 	private static void deselectParties(Canvas canvas) {
 		for(Party p : canvas.getParties()) {
-			//if(EditLabelHandler.isCorrectPartyLabel(p.getLabel().getLabelname())){	//!!!
 				p.setSelected(false);
 				p.getLabel().setSelected(false);
-			//}
 		}
 	}
 
