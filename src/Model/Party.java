@@ -68,8 +68,9 @@ public abstract class Party {
 	
 	public void setPosSeq(int x, int y, Canvas canvas) {
 		for(Coordinate c : coordSeq) {
-			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);}
+			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);return;}
 		}
+		coordSeq.add(new Coordinate(canvas, new Point(x,y)));
 	}
 	
 	/**
@@ -91,8 +92,9 @@ public abstract class Party {
 	 */
 	public void setPosComm(int x, int y, Canvas canvas) {
 		for(Coordinate c : coordComm) {
-			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);}
+			if(c.getCanvas()==canvas) {c.setCoordinate(x, y);return;}
 		}
+		coordComm.add(new Coordinate(canvas, new Point(x,y)));
 	}
 	
 	void addToCanvas(Canvas c, int xSeq, int ySeq, int xComm, int yComm) {

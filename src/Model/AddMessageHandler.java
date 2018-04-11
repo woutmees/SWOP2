@@ -79,6 +79,7 @@ public class AddMessageHandler {
 			int invocLabelX = Math.max(invocationMessage.getReicevedBy().getPosSeq(canvas).getX(), invocationMessage.getSentBy().getPosSeq(canvas).getX()) - Math.abs( (invocationMessage.getReicevedBy().getPosSeq(canvas).getX() - invocationMessage.getSentBy().getPosSeq(canvas).getX() )/2);
 			int invocLabelY = canvas.getOrigineY() +canvas.getHeight()/6 + 30 + (50 * getAmountPredecessors(canvas, invocationMessage));
 			labelInvocation.setPosSeq(invocLabelX, invocLabelY, canvas);
+			invocationMessage.setLabel(labelInvocation);
 			
 			// First all the orders needs to be updated because of the number of predecessors
 			for (Message m : canvas.getMessages()) {
@@ -89,7 +90,6 @@ public class AddMessageHandler {
 			
 			
 			EditLabelHandler.handle(canvas, labelInvocation, invocLabelX, invocLabelY);
-			invocationMessage.setLabel(labelInvocation);
 			
 			// Add message to all windows of the interaction
 			for(Canvas c : subWindows) {
